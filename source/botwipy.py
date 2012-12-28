@@ -15,4 +15,7 @@ auth.set_access_token(settings.OAUTH_TOKEN, settings.OAUTH_TOKEN_SECRET)
 api = tweepy.API(auth)
 
 print 'Nome: {0}'.format(api.me().name)
-api.update_status('Testando Python Twitter')
+
+replies = api.mentions()
+for repli in replies:
+    print repli
