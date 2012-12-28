@@ -1,20 +1,14 @@
 # @author: Charles Tim Batista Garrocho
-# @contact: ctgarrocho@gmail.com
-# @copyright: (C) 2012-2012 Python Software Open Source
+# @contact: charles.garrocho@gmail.com
+# @copyright: (C) 2012-2013 Python Software Open Source
 
 """
-Este é o pacote do projeto SEMON.
+Este é o pacote do projeto BOTWIPY.
 """
 
 
-__version__ = '0.1D.1'
-
+__version__ = '0.0.1'
 
 __all__ = [
-    'detector',
-    'gui',
-    'handler',
-    'recursos',
-    'servidor',
     'settings',
 ]
