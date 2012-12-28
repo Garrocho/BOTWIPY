@@ -3,6 +3,7 @@
 # @contact: charles.garrocho@gmail.com
 # @copyright: (C) 2012-2013 Python Software Open Source
 
+import re
 import time
 import tweepy
 import settings
@@ -23,8 +24,10 @@ print '\nMinhas Mensagens'
 for status in mensagens:
     print status.text
 
-print '\nMensagens dos Meus Amigos Com Referência'
+# Verificando as mensagens com Via referência e adicionando esses usuários.
 msm_amigos = api.friends_timeline()
 for mensagem in msm_amigos:
     if '( via @' in mensagem.text:
-        print mensagem.text
+        usuario = re.findall(r'via @(.*?)\)', mensagem.text)[0]
+        api.get_user(usuario).follow()
+        print '{0} começou a seguir {1}'.format(api.me().name, usuario)
