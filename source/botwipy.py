@@ -14,8 +14,17 @@ auth.set_access_token(settings.OAUTH_TOKEN, settings.OAUTH_TOKEN_SECRET)
 # Conectando a API utilizando os dados da aplicação.
 api = tweepy.API(auth)
 
+print 'Meus Dados'
 print 'Nome: {0}'.format(api.me().name)
 
-replies = api.mentions()
-for repli in replies:
-    print repli
+mensagens = tweepy.Cursor(api.user_timeline).items()
+
+print '\nMinhas Mensagens'
+for status in mensagens:
+    print status.text
+
+print '\nMensagens dos Meus Amigos Com Referência'
+msm_amigos = api.friends_timeline()
+for mensagem in msm_amigos:
+    if '( via @' in mensagem.text:
+        print mensagem.text
