@@ -26,7 +26,7 @@ class BotAPI(tweepy.API):
         self.get_user(usuario).follow()
 
     def verifica_tweet(self, tweet, condicao):
-        usuario = re.findall(r'{0}(.*?):'.format(condicao), tweet.text)
+        usuario = re.findall(r'{0}'.format(condicao), tweet.text)
         if (len(usuario) > 0):
             return usuario[0]
         return None
@@ -49,7 +49,7 @@ if __name__ == '__main__':
         time.sleep(2)
         amigos_tweets = api.get_amigos_tweets()
         for tweet in amigos_tweets:
-            usuario = api.verifica_tweet(tweet, 'RT @')
+            usuario = api.verifica_tweet(tweet, 'RT @(.*?):')
             if usuario is not None:
                 api.seguir_usuario(usuario)
                 print '{0} começou a seguir {1}'.format(api.me().name, usuario)
