@@ -13,8 +13,11 @@ class Example(QtGui.QMainWindow):
         
     def initUI(self):
     
-        tableWidget = TableWidget(4, 3)
-        tableWidget.addLinha(["Charles Garrocho", "Ola amgigos", "10:50:35"])
+        tableWidget = TableWidget(3, 3)
+        tableWidget.configura()
+        tableWidget.addLinha(["Charles Garrocho", "Ola amigos", "10:50:35"])
+        tableWidget.addLinha(["Thiago Garrocho", "Noob kitter", "10:52:59"])
+        tableWidget.addLinha(["Gustavo Garrocho", "Caramba em so tem kiter...", "10:53:38"])
         self.setCentralWidget(tableWidget)
 
         exitAction = QtGui.QAction(QtGui.QIcon('./icons/exit24.png'), 'Sair', self)
@@ -37,7 +40,6 @@ class Example(QtGui.QMainWindow):
         self.show()
     
     def center(self):
-        """Center the window on the screen."""
         screen = QtGui.QDesktopWidget().screenGeometry()
         size = self.geometry()
         self.move((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
@@ -47,13 +49,20 @@ class TableWidget(QtGui.QTableWidget):
 
     def __init_(self, linhas, colunas):
         self.super.__init__(linhas, colunas)
+    
+    def configura(self):
+        self.setHorizontalHeaderLabels(['Usuario', 'Mensagem','Horario'])
+        self.setColumnWidth(0, 130)
+        self.setColumnWidth(1, 430)
+        self.setColumnWidth(2, 70)
         
     def addLinha(self, dados):
         cont = 0
         for dado in dados:
             item = QtGui.QTableWidgetItem(dado)
             self.setItem(self.qtde_linhas, cont, item)
-            cont = cont + 1
+            cont += 1
+        self.qtde_linhas += 1
                 
 def main():
     
