@@ -36,6 +36,7 @@ class Example(QtGui.QMainWindow):
         
         self.setGeometry(600, 600, 650, 550)
         self.setWindowTitle('BOTWIPY - Bot em Python Para Twitter')
+        self.setWindowIcon(QtGui.QIcon('./icons/twitter.png'))
         self.center()
         self.show()
     
@@ -52,6 +53,9 @@ class TableWidget(QtGui.QTableWidget):
     
     def configura(self):
         self.setHorizontalHeaderLabels(['Usuario', 'Mensagem','Horario'])
+        self.itemDoubleClicked.connect(self.editItem)
+        self.setEditTriggers(QtGui.QTableWidget.NoEditTriggers)
+        self.setSortingEnabled(False)
         self.setColumnWidth(0, 130)
         self.setColumnWidth(1, 430)
         self.setColumnWidth(2, 70)
@@ -63,6 +67,9 @@ class TableWidget(QtGui.QTableWidget):
             self.setItem(self.qtde_linhas, cont, item)
             cont += 1
         self.qtde_linhas += 1
+        
+    def editItem(self,clicked):
+        print clicked.row()
                 
 def main():
     
