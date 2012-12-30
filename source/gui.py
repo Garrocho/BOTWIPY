@@ -25,15 +25,25 @@ class Example(QtGui.QMainWindow):
         self.iniciarBot.setStatusTip('Iniciar o Bot - Ctrl+I')
         self.iniciarBot.triggered.connect(self.close)
         
-        self.pararBot = QtGui.QAction(QtGui.QIcon('./icons/end24.png'), 'Parar', self)
+        self.pararBot = QtGui.QAction(QtGui.QIcon('./icons/stop24.png'), 'Parar', self)
         self.pararBot.setShortcut('Ctrl+P')
         self.pararBot.setStatusTip('Parar o Bot - Ctrl+P')
         self.pararBot.triggered.connect(self.close)
         
-        self.confBot = QtGui.QAction(QtGui.QIcon('./icons/edit24.png'), 'Configurar', self)
+        self.confBot = QtGui.QAction(QtGui.QIcon('./icons/conf24.png'), 'Configurar', self)
         self.confBot.setShortcut('Ctrl+C')
         self.confBot.setStatusTip('Configurar o Bot - Ctrl+C')
         self.confBot.triggered.connect(self.close)
+        
+        self.atuaBot = QtGui.QAction(QtGui.QIcon('./icons/atualiza24.png'), 'Atualizar', self)
+        self.atuaBot.setShortcut('Ctrl+A')
+        self.atuaBot.setStatusTip('Atualizar Twitter - Ctrl+A')
+        self.atuaBot.triggered.connect(self.close)
+        
+        self.keysBot = QtGui.QAction(QtGui.QIcon('./icons/keys24.png'), 'Chaves', self)
+        self.keysBot.setShortcut('Ctrl+K')
+        self.keysBot.setStatusTip('Chaves do Bot - Ctrl+K')
+        self.keysBot.triggered.connect(self.close)
         
         self.ajuda = QtGui.QAction(QtGui.QIcon('./icons/help24.png'), 'Ajuda', self)
         self.ajuda.setShortcut('Ctrl+H')
@@ -53,10 +63,13 @@ class Example(QtGui.QMainWindow):
 
         toolBar = self.addToolBar('Sair')
         toolBar.setMovable(False)
-        toolBar.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
+        toolBar.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
         
         toolBar.addAction(self.iniciarBot)
         toolBar.addAction(self.pararBot)
+        toolBar.addAction(self.atuaBot)
+        toolBar.addSeparator()
+        toolBar.addAction(self.keysBot)
         toolBar.addAction(self.confBot)
         toolBar.addSeparator()
         toolBar.addAction(self.ajuda)
