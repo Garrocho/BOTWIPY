@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from PyQt4 import QtGui
+from PyQt4 import QtGui, QtCore
 
 class Example(QtGui.QMainWindow):
     
@@ -47,15 +47,20 @@ class Example(QtGui.QMainWindow):
 
         self.statusBar()
 
-        #menubar = self.menuBar()
-        #fileMenu = menubar.addMenu('&Arquivo')
-        #fileMenu.addAction(self.exitAction)
+        menubar = self.menuBar()
+        fileMenu = menubar.addMenu('&Arquivo')
+        fileMenu.addAction(self.sair)
 
         toolBar = self.addToolBar('Sair')
+        toolBar.setMovable(False)
+        toolBar.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
+        
         toolBar.addAction(self.iniciarBot)
         toolBar.addAction(self.pararBot)
         toolBar.addAction(self.confBot)
+        toolBar.addSeparator()
         toolBar.addAction(self.ajuda)
+        toolBar.addSeparator()
         toolBar.addAction(self.sair)
         
         self.setGeometry(600, 600, 650, 550)
