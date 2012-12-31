@@ -43,10 +43,10 @@ class JanelaInicial(QtGui.QMainWindow):
         self.keysBot.setStatusTip('Chaves do Bot - Ctrl+K')
         self.keysBot.triggered.connect(self.chamarChaves)
         
-        self.ajuda = QtGui.QAction(QtGui.QIcon(settings.AJUDA), 'Ajuda', self)
-        self.ajuda.setShortcut('Ctrl+H')
-        self.ajuda.setStatusTip('Ajuda do Bot - Ctrl+H')
-        self.ajuda.triggered.connect(self.chamarAjuda)
+        self.sobre = QtGui.QAction(QtGui.QIcon(settings.AJUDA), 'Sobre', self)
+        self.sobre.setShortcut('Ctrl+H')
+        self.sobre.setStatusTip('Sobre o BotWiPy - Ctrl+S')
+        self.sobre.triggered.connect(self.chamarSobre)
         
         self.sair = QtGui.QAction(QtGui.QIcon(settings.SAIR), 'Sair', self)
         self.sair.setShortcut('Ctrl+Q')
@@ -54,6 +54,7 @@ class JanelaInicial(QtGui.QMainWindow):
         self.sair.triggered.connect(self.close)
 
         self.toolBar = self.addToolBar('Sair')
+        self.statusBar()
 
     def adicionar(self):
         
@@ -71,7 +72,7 @@ class JanelaInicial(QtGui.QMainWindow):
         self.toolBar.addAction(self.keysBot)
         self.toolBar.addAction(self.confBot)
         self.toolBar.addSeparator()
-        self.toolBar.addAction(self.ajuda)
+        self.toolBar.addAction(self.sobre)
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.sair)
 
@@ -86,19 +87,19 @@ class JanelaInicial(QtGui.QMainWindow):
         self.move((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
         self.show()
 
-    def chamarAjuda(self):
-        exAjuda = JanelaAjuda()
-        exAjuda.exec_()
+    def chamarSobre(self):
+        exSobre = DialogoSobre()
+        exSobre.exec_()
     
     def chamarChaves(self):
         exChaves = DialogoChaves()
         exChaves.exec_()
 
 
-class JanelaAjuda(QtGui.QDialog):
+class DialogoSobre(QtGui.QDialog):
     
     def __init__(self):
-        super(JanelaAjuda, self).__init__()
+        super(DialogoSobre, self).__init__()
         self.iniciar()
         self.adicionar()
         self.configurar()
@@ -120,10 +121,8 @@ class JanelaAjuda(QtGui.QDialog):
         self.setModal(True)
         self.setWindowTitle('BoTiWiPy - Sobre o Software')
         self.setWindowIcon(QtGui.QIcon(settings.LOGO))
-        screen = QtGui.QDesktopWidget().screenGeometry()
-        size = self.geometry()
-        self.move((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
         self.show()
+
 
 class DialogoChaves(QtGui.QDialog):
     
@@ -134,16 +133,11 @@ class DialogoChaves(QtGui.QDialog):
         self.configurar()
         
     def iniciar(self):
+        self.boxDescricao = QtGui.QHBoxLayout()
         self.boxConsumerKey = QtGui.QHBoxLayout()
         self.boxConsumerSecret = QtGui.QHBoxLayout()
         self.boxAcessToken = QtGui.QHBoxLayout()
         self.boxAcessTokenSecret = QtGui.QHBoxLayout()
-        
-        self.boxRotulos = QtGui.QVBoxLayout()
-        self.boxCampoTexto = QtGui.QVBoxLayout()
-        
-        self.boxRotulos = QtGui.QVBoxLayout()
-        self.boxCampoTexto = QtGui.QVBoxLayout()
         
         self.botaoGravar = QtGui.QPushButton(QtGui.QIcon(settings.GRAVAR), 'Gravar')
         self.botaoGravar.setIconSize(QtCore.QSize(30,30));
@@ -154,54 +148,56 @@ class DialogoChaves(QtGui.QDialog):
         self.botaoLimpar = QtGui.QPushButton(QtGui.QIcon(settings.LIMPAR), 'Limpar')
         self.botaoLimpar.setIconSize(QtCore.QSize(30,30));
         
-        self.boxRotuloCampo = QtGui.QHBoxLayout()
         self.boxBotoes = QtGui.QHBoxLayout()
         self.boxTotal = QtGui.QVBoxLayout()                                   
         self.setLayout(self.boxTotal)
         
-        self.rotuloConsumerKey = QtGui.QLabel('Consumer Key')
+        self.rotuloConsumerKey = QtGui.QLabel('Consumer Key           ')
         self.campoTextoConsumerKey = QtGui.QLineEdit("")
         
-        self.rotuloConsumerSecret = QtGui.QLabel('Consumer Secret')
+        self.rotuloConsumerSecret = QtGui.QLabel('Consumer Secret     ')
         self.campoTextoConsumerSecret = QtGui.QLineEdit("")
         
-        self.rotuloAcessToken = QtGui.QLabel('Acess Token')
+        self.rotuloAcessToken = QtGui.QLabel('Acess Token                ')
         self.campoTextoAcessToken = QtGui.QLineEdit("")
         
         self.rotuloAcessTokenSecret = QtGui.QLabel('Acess Token Secret')
         self.campoTextoAcessTokenSecret = QtGui.QLineEdit("")
         
     def adicionar(self):
-        self.boxRotulos.addWidget(self.rotuloConsumerKey)
-        self.boxCampoTexto.addWidget(self.campoTextoConsumerKey)
+        self.boxDescricao.addWidget(QtGui.QLabel('<b>Defina</b> abaixo as chaves de seguranca da <b>conta Twitter</b>'))
+        self.boxConsumerKey.addWidget(self.rotuloConsumerKey)
+        self.boxConsumerKey.addWidget(self.campoTextoConsumerKey)
         
-        self.boxRotulos.addWidget(self.rotuloConsumerSecret)
-        self.boxCampoTexto.addWidget(self.campoTextoConsumerSecret)
+        self.boxConsumerSecret.addWidget(self.rotuloConsumerSecret)
+        self.boxConsumerSecret.addWidget(self.campoTextoConsumerSecret)
         
-        self.boxRotulos.addWidget(self.rotuloAcessToken)
-        self.boxCampoTexto.addWidget(self.campoTextoAcessToken)
+        self.boxAcessToken.addWidget(self.rotuloAcessToken)
+        self.boxAcessToken.addWidget(self.campoTextoAcessToken)
         
-        self.boxRotulos.addWidget(self.rotuloAcessTokenSecret)
-        self.boxCampoTexto.addWidget(self.campoTextoAcessTokenSecret)
+        self.boxAcessTokenSecret.addWidget(self.rotuloAcessTokenSecret)
+        self.boxAcessTokenSecret.addWidget(self.campoTextoAcessTokenSecret)
         
         self.boxBotoes.addWidget(self.botaoGravar)
         self.boxBotoes.addWidget(self.botaoLimpar)
         self.boxBotoes.addWidget(self.botaoCancelar)
 
-        self.boxRotuloCampo.addLayout(self.boxRotulos)
-        self.boxRotuloCampo.addLayout(self.boxCampoTexto)
+        self.boxTotal.addLayout(self.boxDescricao)
+        self.boxTotal.addLayout(self.boxConsumerKey)
+        self.boxTotal.addLayout(self.boxConsumerSecret)
+        self.boxTotal.addLayout(self.boxAcessToken)
+        self.boxTotal.addLayout(self.boxAcessTokenSecret)
 
-        self.boxTotal.addLayout(self.boxRotuloCampo)
         self.boxTotal.addLayout(self.boxBotoes)
 
     def configurar(self):
         self.setModal(True)
         self.setWindowTitle('BoTiWiPy - Chaves de Seguranca')
         self.setWindowIcon(QtGui.QIcon(settings.LOGO))
-        self.setGeometry(400, 400, 450, 200)
-        screen = QtGui.QDesktopWidget().screenGeometry()
-        size = self.geometry()
-        self.move((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
+        self.setGeometry(400, 400, 400, 240)
+        self.screen = QtGui.QDesktopWidget().screenGeometry()
+        self.size = self.geometry()
+        self.move((self.screen.width() - self.size.width()) / 2, (self.screen.height() - self.size.height()) / 2)
         self.show()
 
 if __name__ == '__main__':
