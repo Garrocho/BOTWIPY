@@ -14,15 +14,13 @@ class Example(QtGui.QMainWindow):
         
     def initUI(self):
     
-        myObj = StupidClass()  
-  
         webView = QtWebKit.QWebView()
-        webView.page().mainFrame().addToJavaScriptWindowObject("pyObj", myObj)
         
         html = open(settings.HTML).read()
         webView.setHtml(html)
         webView.page().mainFrame().evaluateJavaScript('createDiv("%s")' % ("<b>charles garrocho</b> (19 minutos atras)<br> Primeira Mensagem do bot... <a href='http://www.google.com'>ReTwittar</a>",))
         webView.page().mainFrame().evaluateJavaScript('createDiv("%s")' % ("<b>arthur assuncao</b> (23 minutos atras)<br> A Garantia do Twitter Nao e Boa... <a href='http://www.google.com'>ReTwittar</a>",))
+        webView.page().mainFrame().evaluateJavaScript('createDiv("%s")' % ("<b>alemao</b> (28 minutos atras)<br> Temos Muito no Que Trabalhar... <a href='http://www.google.com'>ReTwittar</a>",))
         
         self.setCentralWidget(webView)
 
@@ -62,7 +60,7 @@ class Example(QtGui.QMainWindow):
         self.sair.triggered.connect(self.close)
 
         self.statusBar()
-
+        
         toolBar = self.addToolBar('Sair')
         toolBar.setMovable(False)
         toolBar.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
@@ -88,46 +86,6 @@ class Example(QtGui.QMainWindow):
         size = self.geometry()
         self.move((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
   
-class TableWidget(QtGui.QTableWidget):
-    qtde_linhas = 0
-
-    def __init_(self, linhas, colunas):
-        self.super.__init__(linhas, colunas)
-    
-    def configura(self):
-        self.setHorizontalHeaderLabels(['Usuario', 'Mensagem','Horario'])
-        self.itemDoubleClicked.connect(self.editItem)
-        self.setEditTriggers(QtGui.QTableWidget.NoEditTriggers)
-        self.setSortingEnabled(False)
-        self.setColumnWidth(0, 130)
-        self.setColumnWidth(1, 430)
-        self.setColumnWidth(2, 70)
-        
-    def addLinha(self, dados):
-        cont = 0
-        for dado in dados:
-            item = QtGui.QTableWidgetItem(dado)
-            self.setItem(self.qtde_linhas, cont, item)
-            cont += 1
-        self.qtde_linhas += 1
-        
-    def editItem(self,clicked):
-        print clicked.row()
-
-class StupidClass(QtCore.QObject):  
-    """Simple class with one slot and one read-only property."""  
- 
-    @QtCore.pyqtSlot(str)  
-    def showMessage(self, msg):  
-        """Open a message box and display the specified message."""  
-        QtGui.QMessageBox.information(None, "Info", msg)  
-  
-    def _pyVersion(self):  
-        """Return the Python version."""  
-        return sys.version  
-  
-    """Python interpreter version property."""  
-    pyVersion = QtCore.pyqtProperty(str, fget=_pyVersion)
              
 def main():
     
