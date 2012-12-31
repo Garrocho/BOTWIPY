@@ -2,7 +2,7 @@
 
 import sys
 import settings
-from PyQt4 import QtGui, QtCore, QtWebKit
+from PyQt4 import QtGui, QtCore, QtWebKit, Qt
 
 class JanelaInicial(QtGui.QMainWindow):
     
@@ -100,9 +100,13 @@ class JanelaAjuda(QtGui.QDialog):
         self.configurar()
         
     def iniciar(self):
-        pass
-        self.labelImagem = QtGui.QLabel(QtGui.QIcon(settings.LOGO))
-        self.setCentralWidget(self.labelImagem)
+        vbox = QtGui.QVBoxLayout()                                        
+        self.setLayout(vbox)
+          
+        self.foto_label = QtGui.QLabel()
+        self.foto_label.setPixmap(QtGui.QPixmap(settings.LOGO))
+        # adiciona a foto_label a vbox
+        vbox.addWidget(self.foto_label)
 
     def configurar(self):
         self.setGeometry(300, 300, 350, 250)
