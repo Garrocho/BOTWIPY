@@ -142,6 +142,9 @@ class DialogoChaves(QtGui.QDialog):
         self.boxRotulos = QtGui.QVBoxLayout()
         self.boxCampoTexto = QtGui.QVBoxLayout()
         
+        self.botaoGravar = QtGui.QPushButton(QtGui.QIcon(settings.GRAVAR), 'Gravar')
+        self.botaoCancelar = QtGui.QPushButton(QtGui.QIcon(settings.CANCELAR), 'Cancelar')
+        
         self.boxTotal = QtGui.QHBoxLayout()                                     
         self.setLayout(self.boxTotal)
         
