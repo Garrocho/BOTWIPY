@@ -28,5 +28,9 @@ SAIR = '{0}/{1}/{2}'.format(PATH, ICON, 'SAIR.png')
 ATUALIZAR = '{0}/{1}/{2}'.format(PATH, ICON, 'ATUALIZAR.png')
 LOGO = '{0}/{1}/{2}'.format(PATH, ICON, 'LOGO.png')
 
+GRAVAR = '{0}/{1}/{2}'.format(PATH, ICON, 'GRAVAR.png')
+CANCELAR = '{0}/{1}/{2}'.format(PATH, ICON, 'CANCELAR.png')
+LIMPAR = '{0}/{1}/{2}'.format(PATH, ICON, 'LIMPAR.png')
+
 # Endereco de arquivo do projeto.
 HTML = '{0}/{1}/{2}'.format(PATH, ARQ, 'index.html')
