@@ -59,11 +59,21 @@ class JanelaInicial(QtGui.QMainWindow):
     def adicionar(self):
         
         self.webView.setHtml(self.html)
-        self.webView.page().mainFrame().evaluateJavaScript('createDiv("%s")' % ("<b>charles garrocho</b> (19 minutos atras)<br> Primeira Mensagem do bot... <a href='http://www.google.com'>ReTwittar</a>",))
-        self.webView.page().mainFrame().evaluateJavaScript('createDiv("%s")' % ("<b>arthur assuncao</b> (23 minutos atras)<br> A Garantia do Twitter Nao e Boa... <a href='http://www.google.com'>ReTwittar</a>",))
-        self.webView.page().mainFrame().evaluateJavaScript('createDiv("%s")' % ("<b>alemao</b> (28 minutos atras)<br> Temos Muito no Que Trabalhar... <a href='http://www.google.com'>ReTwittar</a>",))
+        self.webView.page().mainFrame().evaluateJavaScript('novoElemento("%s")' % ("<b>charles garrocho</b> (19 minutos atras)<br> Primeira Mensagem do bot... <a href='http://www.google.com'>ReTwittar</a>",))
+        self.webView.page().mainFrame().evaluateJavaScript('novoElemento("%s")' % ("<b>arthur assuncao</b> (23 minutos atras)<br> A Garantia do Twitter Nao e Boa... <a href='http://www.google.com'>ReTwittar</a>",))
+        self.webView.page().mainFrame().evaluateJavaScript('novoElemento("%s")' % ("<b>alemao</b> (28 minutos atras)<br> Temos Muito no Que Trabalhar... <a href='http://www.google.com'>ReTwittar</a>",))
         
         self.setCentralWidget(self.webView)
+        
+        self.campoTextoMensagem = QtGui.QLineEdit("")
+        self.botao = QtGui.QPushButton('Enviar')
+        
+        self.bot = QtGui.QDockWidget('Enviar Twitter', self)
+        self.bot2 = QtGui.QDockWidget('Enviar Twitter', self)
+        self.bot.setWidget(self.campoTextoMensagem)
+        self.bot2.setWidget(self.botao)
+        self.addDockWidget(QtCore.Qt.BottomDockWidgetArea, self.bot)
+        self.addDockWidget(QtCore.Qt.BottomDockWidgetArea, self.bot2)
 
         self.toolBar.addAction(self.iniciarBot)
         self.toolBar.addAction(self.pararBot)
@@ -152,7 +162,7 @@ class DialogoChaves(QtGui.QDialog):
         self.boxTotal = QtGui.QVBoxLayout()                                   
         self.setLayout(self.boxTotal)
         
-        self.rotuloConsumerKey = QtGui.QLabel('Consumer Key           ')
+        self.rotuloConsumerKey = QtGui.QLabel('Consumer Key            ')
         self.campoTextoConsumerKey = QtGui.QLineEdit("")
         
         self.rotuloConsumerSecret = QtGui.QLabel('Consumer Secret     ')
