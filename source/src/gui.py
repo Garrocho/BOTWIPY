@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
+import settings
 from PyQt4 import QtGui, QtCore, QtWebKit
 
 class Example(QtGui.QMainWindow):
@@ -13,55 +14,49 @@ class Example(QtGui.QMainWindow):
         
     def initUI(self):
     
-        #tableWidget = TableWidget(3, 3)
-        #tableWidget.configura()
-        #tableWidget.addLinha(["Charles Garrocho", "Ola amigos", "10:50:35"])
-        #tableWidget.addLinha(["Thiago Garrocho", "Noob kitter", "10:52:59"])
-        #tableWidget.addLinha(["Gustavo Garrocho", "Caramba em so tem kiter...", "10:53:38"])
-        
         myObj = StupidClass()  
   
         webView = QtWebKit.QWebView()
         webView.page().mainFrame().addToJavaScriptWindowObject("pyObj", myObj)
         
-        html = open("index.html").read()
+        html = open(settings.HTML).read()
         webView.setHtml(html)
         webView.page().mainFrame().evaluateJavaScript('createDiv("%s")' % ("<b>charles garrocho</b> (19 minutos atras)<br> Primeira Mensagem do bot... <a href='http://www.google.com'>ReTwittar</a>",))
         webView.page().mainFrame().evaluateJavaScript('createDiv("%s")' % ("<b>arthur assuncao</b> (23 minutos atras)<br> A Garantia do Twitter Nao e Boa... <a href='http://www.google.com'>ReTwittar</a>",))
         
         self.setCentralWidget(webView)
 
-        self.iniciarBot = QtGui.QAction(QtGui.QIcon('./icons/start24.png'), 'Iniciar', self)
+        self.iniciarBot = QtGui.QAction(QtGui.QIcon(settings.INICIAR), 'Iniciar', self)
         self.iniciarBot.setShortcut('Ctrl+I')
         self.iniciarBot.setStatusTip('Iniciar o Bot - Ctrl+I')
         self.iniciarBot.triggered.connect(self.close)
         
-        self.pararBot = QtGui.QAction(QtGui.QIcon('./icons/stop24.png'), 'Parar', self)
+        self.pararBot = QtGui.QAction(QtGui.QIcon(settings.PARAR), 'Parar', self)
         self.pararBot.setShortcut('Ctrl+P')
         self.pararBot.setStatusTip('Parar o Bot - Ctrl+P')
         self.pararBot.triggered.connect(self.close)
         
-        self.confBot = QtGui.QAction(QtGui.QIcon('./icons/conf24.png'), 'Configurar', self)
+        self.confBot = QtGui.QAction(QtGui.QIcon(settings.CONFIGURAR), 'Configurar', self)
         self.confBot.setShortcut('Ctrl+C')
         self.confBot.setStatusTip('Configurar o Bot - Ctrl+C')
         self.confBot.triggered.connect(self.close)
         
-        self.atuaBot = QtGui.QAction(QtGui.QIcon('./icons/atualiza24.png'), 'Atualizar', self)
+        self.atuaBot = QtGui.QAction(QtGui.QIcon(settings.ATUALIZAR), 'Atualizar', self)
         self.atuaBot.setShortcut('Ctrl+A')
         self.atuaBot.setStatusTip('Atualizar Twitter - Ctrl+A')
         self.atuaBot.triggered.connect(self.close)
         
-        self.keysBot = QtGui.QAction(QtGui.QIcon('./icons/keys24.png'), 'Chaves', self)
+        self.keysBot = QtGui.QAction(QtGui.QIcon(settings.CHAVES), 'Chaves', self)
         self.keysBot.setShortcut('Ctrl+K')
         self.keysBot.setStatusTip('Chaves do Bot - Ctrl+K')
         self.keysBot.triggered.connect(self.close)
         
-        self.ajuda = QtGui.QAction(QtGui.QIcon('./icons/help24.png'), 'Ajuda', self)
+        self.ajuda = QtGui.QAction(QtGui.QIcon(settings.AJUDA), 'Ajuda', self)
         self.ajuda.setShortcut('Ctrl+H')
         self.ajuda.setStatusTip('Ajuda do Bot - Ctrl+H')
         self.ajuda.triggered.connect(self.close)
         
-        self.sair = QtGui.QAction(QtGui.QIcon('./icons/exit24.png'), 'Sair', self)
+        self.sair = QtGui.QAction(QtGui.QIcon(settings.SAIR), 'Sair', self)
         self.sair.setShortcut('Ctrl+Q')
         self.sair.setStatusTip('Sair da Aplicacao - Ctrl+Q')
         self.sair.triggered.connect(self.close)
@@ -84,7 +79,7 @@ class Example(QtGui.QMainWindow):
         
         self.setGeometry(600, 600, 650, 550)
         self.setWindowTitle('BOTWIPY - Bot em Python Para Twitter')
-        self.setWindowIcon(QtGui.QIcon('./icons/twitter.png'))
+        self.setWindowIcon(QtGui.QIcon(settings.LOGO))
         self.center()
         self.show()
     

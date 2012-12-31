@@ -13,12 +13,12 @@ CONSUMER_SECRET = 'JegRGulzhvp09grgBtPNaMeuvyPvYKwTkPRrz0X1c'
 OAUTH_TOKEN = '1024579182-pBEpPE8SyZjplZJHbPE64G3dcskSlUZYWutOpo2'
 OAUTH_TOKEN_SECRET = 'aE6RBQl8HtZ9auMPEvTtN7R9dZ2oqp1WI5vXONs'
 
-# Endereço principal do source do projeto.
+# Endereco principal do source do projeto.
 PATH = os.getcwd().split('/src')[0]
 ICON = 'icon/'
 ARQ = 'arq/'
 
-# Endereço de cada icone do projeto.
+# Endereco de cada icone do projeto.
 INICIAR = '{0}/{1}/{2}'.format(PATH, ICON, 'INICIAR.png')
 PARAR = '{0}/{1}/{2}'.format(PATH, ICON, 'PARAR.png')
 CHAVES = '{0}/{1}/{2}'.format(PATH, ICON, 'CHAVES.png')
@@ -28,5 +28,5 @@ SAIR = '{0}/{1}/{2}'.format(PATH, ICON, 'SAIR.png')
 ATUALIZAR = '{0}/{1}/{2}'.format(PATH, ICON, 'ATUALIZAR.png')
 LOGO = '{0}/{1}/{2}'.format(PATH, ICON, 'LOGO.png')
 
-# Endereço de arquivo do projeto.
+# Endereco de arquivo do projeto.
 HTML = '{0}/{1}/{2}'.format(PATH, ARQ, 'index.html')
