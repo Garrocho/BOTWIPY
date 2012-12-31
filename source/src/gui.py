@@ -1,29 +1,23 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+# coding: utf-8
 
 import sys
 import settings
 from PyQt4 import QtGui, QtCore, QtWebKit
 
-class Example(QtGui.QMainWindow):
+class JanelaInicial(QtGui.QMainWindow):
     
     def __init__(self):
-        super(Example, self).__init__()
+        super(JanelaInicial, self).__init__()
+        self.iniciar()
+        self.adicionar()
+        self.configurar()
         
-        self.initUI()
-        
-    def initUI(self):
+    def iniciar(self):
     
-        webView = QtWebKit.QWebView()
+        self.webView = QtWebKit.QWebView()
         
-        html = open(settings.HTML).read()
-        webView.setHtml(html)
-        webView.page().mainFrame().evaluateJavaScript('createDiv("%s")' % ("<b>charles garrocho</b> (19 minutos atras)<br> Primeira Mensagem do bot... <a href='http://www.google.com'>ReTwittar</a>",))
-        webView.page().mainFrame().evaluateJavaScript('createDiv("%s")' % ("<b>arthur assuncao</b> (23 minutos atras)<br> A Garantia do Twitter Nao e Boa... <a href='http://www.google.com'>ReTwittar</a>",))
-        webView.page().mainFrame().evaluateJavaScript('createDiv("%s")' % ("<b>alemao</b> (28 minutos atras)<br> Temos Muito no Que Trabalhar... <a href='http://www.google.com'>ReTwittar</a>",))
+        self.html = open(settings.HTML).read()
         
-        self.setCentralWidget(webView)
-
         self.iniciarBot = QtGui.QAction(QtGui.QIcon(settings.INICIAR), 'Iniciar', self)
         self.iniciarBot.setShortcut('Ctrl+I')
         self.iniciarBot.setStatusTip('Iniciar o Bot - Ctrl+I')
@@ -52,47 +46,79 @@ class Example(QtGui.QMainWindow):
         self.ajuda = QtGui.QAction(QtGui.QIcon(settings.AJUDA), 'Ajuda', self)
         self.ajuda.setShortcut('Ctrl+H')
         self.ajuda.setStatusTip('Ajuda do Bot - Ctrl+H')
-        self.ajuda.triggered.connect(self.close)
+        self.ajuda.triggered.connect(self.chamarAjuda)
         
         self.sair = QtGui.QAction(QtGui.QIcon(settings.SAIR), 'Sair', self)
         self.sair.setShortcut('Ctrl+Q')
         self.sair.setStatusTip('Sair da Aplicacao - Ctrl+Q')
         self.sair.triggered.connect(self.close)
 
-        self.statusBar()
+        self.toolBar = self.addToolBar('Sair')
+
+    def adicionar(self):
         
-        toolBar = self.addToolBar('Sair')
-        toolBar.setMovable(False)
-        toolBar.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
-        toolBar.addAction(self.iniciarBot)
-        toolBar.addAction(self.pararBot)
-        toolBar.addAction(self.atuaBot)
-        toolBar.addSeparator()
-        toolBar.addAction(self.keysBot)
-        toolBar.addAction(self.confBot)
-        toolBar.addSeparator()
-        toolBar.addAction(self.ajuda)
-        toolBar.addSeparator()
-        toolBar.addAction(self.sair)
+        self.webView.setHtml(self.html)
+        self.webView.page().mainFrame().evaluateJavaScript('createDiv("%s")' % ("<b>charles garrocho</b> (19 minutos atras)<br> Primeira Mensagem do bot... <a href='http://www.google.com'>ReTwittar</a>",))
+        self.webView.page().mainFrame().evaluateJavaScript('createDiv("%s")' % ("<b>arthur assuncao</b> (23 minutos atras)<br> A Garantia do Twitter Nao e Boa... <a href='http://www.google.com'>ReTwittar</a>",))
+        self.webView.page().mainFrame().evaluateJavaScript('createDiv("%s")' % ("<b>alemao</b> (28 minutos atras)<br> Temos Muito no Que Trabalhar... <a href='http://www.google.com'>ReTwittar</a>",))
         
+        self.setCentralWidget(self.webView)
+
+        self.toolBar.addAction(self.iniciarBot)
+        self.toolBar.addAction(self.pararBot)
+        self.toolBar.addAction(self.atuaBot)
+        self.toolBar.addSeparator()
+        self.toolBar.addAction(self.keysBot)
+        self.toolBar.addAction(self.confBot)
+        self.toolBar.addSeparator()
+        self.toolBar.addAction(self.ajuda)
+        self.toolBar.addSeparator()
+        self.toolBar.addAction(self.sair)
+
+    def configurar(self):
+        self.toolBar.setMovable(False)
+        self.toolBar.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
         self.setGeometry(600, 600, 650, 550)
         self.setWindowTitle('BOTWIPY - Bot em Python Para Twitter')
         self.setWindowIcon(QtGui.QIcon(settings.LOGO))
-        self.center()
+        screen = QtGui.QDesktopWidget().screenGeometry()
+        size = self.geometry()
+        self.move((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
+        self.statusBar().showMessage('O Bot Está Desligado...')
         self.show()
     
+    def chamarAjuda(self):
+        exAjuda = JanelaAjuda()
+        exAjuda.exec_()
+
+
+class JanelaAjuda(QtGui.QDialog):
+    
+    def __init__(self):
+        super(JanelaAjuda, self).__init__()
+        self.iniciar()
+        self.configurar()
+        
+    def iniciar(self):
+        pass
+        self.labelImagem = QtGui.QLabel(QtGui.QIcon(settings.LOGO))
+        self.setCentralWidget(self.labelImagem)
+
+    def configurar(self):
+        self.setGeometry(300, 300, 350, 250)
+        self.setModal(True)
+        self.setWindowTitle('Ajuda - Bot em Python Para Twitter')
+        self.setWindowIcon(QtGui.QIcon(settings.LOGO))
+        self.center()
+        self.show()
+
     def center(self):
         screen = QtGui.QDesktopWidget().screenGeometry()
         size = self.geometry()
         self.move((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
-  
-             
-def main():
-    
-    app = QtGui.QApplication(sys.argv)
-    ex = Example()
-    sys.exit(app.exec_())
 
 
 if __name__ == '__main__':
-    main()
+    app = QtGui.QApplication(sys.argv)
+    ex = JanelaInicial()
+    sys.exit(app.exec_())
