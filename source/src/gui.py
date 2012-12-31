@@ -78,15 +78,14 @@ class JanelaInicial(QtGui.QMainWindow):
     def configurar(self):
         self.toolBar.setMovable(False)
         self.toolBar.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
-        self.setGeometry(600, 600, 650, 550)
+        self.setGeometry(600, 600, 650, 500)
         self.setWindowTitle('BOTWIPY - Bot em Python Para Twitter')
         self.setWindowIcon(QtGui.QIcon(settings.LOGO))
         screen = QtGui.QDesktopWidget().screenGeometry()
         size = self.geometry()
         self.move((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
-        self.statusBar().showMessage('O Bot Está Desligado...')
         self.show()
-    
+
     def chamarAjuda(self):
         exAjuda = JanelaAjuda()
         exAjuda.exec_()
@@ -100,26 +99,21 @@ class JanelaAjuda(QtGui.QDialog):
         self.configurar()
         
     def iniciar(self):
-        vbox = QtGui.QVBoxLayout()                                        
+        vbox = QtGui.QHBoxLayout()                                        
         self.setLayout(vbox)
           
         self.foto_label = QtGui.QLabel()
         self.foto_label.setPixmap(QtGui.QPixmap(settings.LOGO))
-        # adiciona a foto_label a vbox
         vbox.addWidget(self.foto_label)
+        
+        self.label = QtGui.QLabel('<H3>Informacoes do software</H3> <b>Software: </b>Bot Twitter em Python <br> <b>Versao: </b> 1.0 <br> <b>Copyright: </b>Open Source<br> <H3>Desenvolvedores</H3> <b>Nome: </b>Charles Tim Batista Garrocho <br><b>Contato: </b>charles.garrocho@gmail.com')
+        vbox.addWidget(self.label)
 
     def configurar(self):
-        self.setGeometry(300, 300, 350, 250)
         self.setModal(True)
         self.setWindowTitle('Ajuda - Bot em Python Para Twitter')
         self.setWindowIcon(QtGui.QIcon(settings.LOGO))
-        self.center()
         self.show()
-
-    def center(self):
-        screen = QtGui.QDesktopWidget().screenGeometry()
-        size = self.geometry()
-        self.move((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
 
 
 if __name__ == '__main__':
