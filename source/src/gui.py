@@ -142,10 +142,21 @@ class DialogoChaves(QtGui.QDialog):
         self.boxRotulos = QtGui.QVBoxLayout()
         self.boxCampoTexto = QtGui.QVBoxLayout()
         
-        self.botaoGravar = QtGui.QPushButton(QtGui.QIcon(settings.GRAVAR), 'Gravar')
-        self.botaoCancelar = QtGui.QPushButton(QtGui.QIcon(settings.CANCELAR), 'Cancelar')
+        self.boxRotulos = QtGui.QVBoxLayout()
+        self.boxCampoTexto = QtGui.QVBoxLayout()
         
-        self.boxTotal = QtGui.QHBoxLayout()                                     
+        self.botaoGravar = QtGui.QPushButton(QtGui.QIcon(settings.GRAVAR), 'Gravar')
+        self.botaoGravar.setIconSize(QtCore.QSize(30,30));
+        
+        self.botaoCancelar = QtGui.QPushButton(QtGui.QIcon(settings.CANCELAR), 'Cancelar')
+        self.botaoCancelar.setIconSize(QtCore.QSize(30,30));
+        
+        self.botaoLimpar = QtGui.QPushButton(QtGui.QIcon(settings.LIMPAR), 'Limpar')
+        self.botaoLimpar.setIconSize(QtCore.QSize(30,30));
+        
+        self.boxRotuloCampo = QtGui.QHBoxLayout()
+        self.boxBotoes = QtGui.QHBoxLayout()
+        self.boxTotal = QtGui.QVBoxLayout()                                   
         self.setLayout(self.boxTotal)
         
         self.rotuloConsumerKey = QtGui.QLabel('Consumer Key')
@@ -173,17 +184,21 @@ class DialogoChaves(QtGui.QDialog):
         self.boxRotulos.addWidget(self.rotuloAcessTokenSecret)
         self.boxCampoTexto.addWidget(self.campoTextoAcessTokenSecret)
         
-        self.boxRotulos.addWidget(self.botaoGravar)
-        self.boxCampoTexto.addWidget(self.botaoCancelar)
-        
-        self.boxTotal.addLayout(self.boxRotulos)
-        self.boxTotal.addLayout(self.boxCampoTexto)
+        self.boxBotoes.addWidget(self.botaoGravar)
+        self.boxBotoes.addWidget(self.botaoLimpar)
+        self.boxBotoes.addWidget(self.botaoCancelar)
+
+        self.boxRotuloCampo.addLayout(self.boxRotulos)
+        self.boxRotuloCampo.addLayout(self.boxCampoTexto)
+
+        self.boxTotal.addLayout(self.boxRotuloCampo)
+        self.boxTotal.addLayout(self.boxBotoes)
 
     def configurar(self):
         self.setModal(True)
         self.setWindowTitle('BoTiWiPy - Chaves de Seguranca')
         self.setWindowIcon(QtGui.QIcon(settings.LOGO))
-        #self.setGeometry(400, 400, 450, 300)
+        self.setGeometry(400, 400, 450, 200)
         screen = QtGui.QDesktopWidget().screenGeometry()
         size = self.geometry()
         self.move((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
