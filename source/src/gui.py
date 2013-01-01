@@ -1,10 +1,18 @@
 # coding: utf-8
+# @author: Charles Tim Batista Garrocho
+# @contact: charles.garrocho@gmail.com
+# @copyright: (C) 2012-2013 Python Software Open Source
 
 import sys
 import settings
 from PyQt4 import QtGui, QtCore, QtWebKit, Qt
 
+
 class JanelaInicial(QtGui.QMainWindow):
+    """
+    Essa é a Interface gráfica inicial do botwipy. Nela é definido uma barra de
+    botões o carregamento de uma lista de um arquivo html e a barra de status.
+    """
     
     def __init__(self):
         super(JanelaInicial, self).__init__()
@@ -90,13 +98,17 @@ class JanelaInicial(QtGui.QMainWindow):
     def chamarSobre(self):
         exSobre = DialogoSobre()
         exSobre.exec_()
-    
+
     def chamarChaves(self):
         exChaves = DialogoChaves()
         exChaves.exec_()
 
 
 class DialogoSobre(QtGui.QDialog):
+    """
+    Essa é a Interface gráfica do dialogo sobre, onde contém as informações de
+    software. Nela é definido vários rótulos e uma imagem logo do software.
+    """
     
     def __init__(self):
         super(DialogoSobre, self).__init__()
@@ -125,6 +137,10 @@ class DialogoSobre(QtGui.QDialog):
 
 
 class DialogoChaves(QtGui.QDialog):
+    """
+    Essa é a Interface gráfica do dialogo de definição de chaves para o acesso
+    a conta twitter. Nela é definido vários rótulos e campos de texto e botões.
+    """
     
     def __init__(self):
         super(DialogoChaves, self).__init__()
