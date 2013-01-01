@@ -65,16 +65,6 @@ class JanelaInicial(QtGui.QMainWindow):
         
         self.setCentralWidget(self.webView)
         
-        self.campoTextoMensagem = QtGui.QLineEdit("")
-        self.botao = QtGui.QPushButton('Enviar')
-        
-        self.bot = QtGui.QDockWidget('Enviar Twitter', self)
-        self.bot2 = QtGui.QDockWidget('Enviar Twitter', self)
-        self.bot.setWidget(self.campoTextoMensagem)
-        self.bot2.setWidget(self.botao)
-        self.addDockWidget(QtCore.Qt.BottomDockWidgetArea, self.bot)
-        self.addDockWidget(QtCore.Qt.BottomDockWidgetArea, self.bot2)
-
         self.toolBar.addAction(self.iniciarBot)
         self.toolBar.addAction(self.pararBot)
         self.toolBar.addAction(self.atuaBot)
@@ -143,11 +133,11 @@ class DialogoChaves(QtGui.QDialog):
         self.configurar()
         
     def iniciar(self):
-        self.boxDescricao = QtGui.QHBoxLayout()
-        self.boxConsumerKey = QtGui.QHBoxLayout()
-        self.boxConsumerSecret = QtGui.QHBoxLayout()
-        self.boxAcessToken = QtGui.QHBoxLayout()
-        self.boxAcessTokenSecret = QtGui.QHBoxLayout()
+        self.boxTotal = QtGui.QVBoxLayout()
+        self.boxRotuloCampo = QtGui.QHBoxLayout()
+        self.boxRotulo = QtGui.QVBoxLayout()
+        self.boxCampo = QtGui.QVBoxLayout()
+        self.boxBotao = QtGui.QHBoxLayout()
         
         self.botaoGravar = QtGui.QPushButton(QtGui.QIcon(settings.GRAVAR), 'Gravar')
         self.botaoGravar.setIconSize(QtCore.QSize(30,30));
@@ -157,10 +147,6 @@ class DialogoChaves(QtGui.QDialog):
         
         self.botaoLimpar = QtGui.QPushButton(QtGui.QIcon(settings.LIMPAR), 'Limpar')
         self.botaoLimpar.setIconSize(QtCore.QSize(30,30));
-        
-        self.boxBotoes = QtGui.QHBoxLayout()
-        self.boxTotal = QtGui.QVBoxLayout()                                   
-        self.setLayout(self.boxTotal)
         
         self.rotuloConsumerKey = QtGui.QLabel('Consumer Key            ')
         self.campoTextoConsumerKey = QtGui.QLineEdit("")
@@ -175,30 +161,31 @@ class DialogoChaves(QtGui.QDialog):
         self.campoTextoAcessTokenSecret = QtGui.QLineEdit("")
         
     def adicionar(self):
-        self.boxDescricao.addWidget(QtGui.QLabel('<b>Defina</b> abaixo as chaves de seguranca da <b>conta Twitter</b>'))
-        self.boxConsumerKey.addWidget(self.rotuloConsumerKey)
-        self.boxConsumerKey.addWidget(self.campoTextoConsumerKey)
+        self.boxTotal.addWidget(QtGui.QLabel('<b>Defina</b> abaixo as chaves de seguranca da <b>conta Twitter</b>'))
+        self.boxRotulo.addWidget(self.rotuloConsumerKey)
+        self.boxCampo.addWidget(self.campoTextoConsumerKey)
         
-        self.boxConsumerSecret.addWidget(self.rotuloConsumerSecret)
-        self.boxConsumerSecret.addWidget(self.campoTextoConsumerSecret)
+        self.boxRotulo.addWidget(self.rotuloConsumerSecret)
+        self.boxCampo.addWidget(self.campoTextoConsumerSecret)
         
-        self.boxAcessToken.addWidget(self.rotuloAcessToken)
-        self.boxAcessToken.addWidget(self.campoTextoAcessToken)
+        self.boxRotulo.addWidget(self.rotuloAcessToken)
+        self.boxCampo.addWidget(self.campoTextoAcessToken)
         
-        self.boxAcessTokenSecret.addWidget(self.rotuloAcessTokenSecret)
-        self.boxAcessTokenSecret.addWidget(self.campoTextoAcessTokenSecret)
+        self.boxRotulo.addWidget(self.rotuloAcessTokenSecret)
+        self.boxCampo.addWidget(self.campoTextoAcessTokenSecret)
         
-        self.boxBotoes.addWidget(self.botaoGravar)
-        self.boxBotoes.addWidget(self.botaoLimpar)
-        self.boxBotoes.addWidget(self.botaoCancelar)
+        self.boxBotao.addWidget(self.botaoGravar)
+        self.boxBotao.addWidget(self.botaoLimpar)
+        self.boxBotao.addWidget(self.botaoCancelar)
 
-        self.boxTotal.addLayout(self.boxDescricao)
-        self.boxTotal.addLayout(self.boxConsumerKey)
-        self.boxTotal.addLayout(self.boxConsumerSecret)
-        self.boxTotal.addLayout(self.boxAcessToken)
-        self.boxTotal.addLayout(self.boxAcessTokenSecret)
+        self.boxRotuloCampo.addLayout(self.boxRotulo)
+        self.boxRotuloCampo.addLayout(self.boxCampo)
+        
+        self.boxTotal.addLayout(self.boxRotuloCampo)
 
-        self.boxTotal.addLayout(self.boxBotoes)
+        self.boxTotal.addLayout(self.boxBotao)
+        
+        self.setLayout(self.boxTotal)
 
     def configurar(self):
         self.setModal(True)
