@@ -4,6 +4,8 @@
 
 import os
 
+# Defina Aqui o Estado Inicial do Bot
+RODAR = False
 
 # Consumer Key
 CONSUMER_KEY = 'fE5bvsY0CEsoy9WUhCEpLw'
