@@ -5,8 +5,11 @@
 
 import sys
 import settings
+import botwipy
 from PyQt4 import QtGui, QtCore, QtWebKit, Qt
 
+# Conectando a API utilizando os dados da aplicação.
+bot = BotAPI(auth)
 
 class JanelaInicial(QtGui.QMainWindow):
     """
@@ -29,12 +32,12 @@ class JanelaInicial(QtGui.QMainWindow):
         self.iniciarBot = QtGui.QAction(QtGui.QIcon(settings.INICIAR), 'Iniciar', self)
         self.iniciarBot.setShortcut('Ctrl+I')
         self.iniciarBot.setStatusTip('Iniciar o Bot - Ctrl+I')
-        self.iniciarBot.triggered.connect(self.close)
+        self.iniciarBot.triggered.connect(self.iniciar_bot)
         
         self.pararBot = QtGui.QAction(QtGui.QIcon(settings.PARAR), 'Parar', self)
         self.pararBot.setShortcut('Ctrl+P')
         self.pararBot.setStatusTip('Parar o Bot - Ctrl+P')
-        self.pararBot.triggered.connect(self.close)
+        self.pararBot.triggered.connect(self.parar_bot)
         
         self.confBot = QtGui.QAction(QtGui.QIcon(settings.CONFIGURAR), 'Configurar', self)
         self.confBot.setShortcut('Ctrl+C')
@@ -49,12 +52,12 @@ class JanelaInicial(QtGui.QMainWindow):
         self.keysBot = QtGui.QAction(QtGui.QIcon(settings.CHAVES), 'Chaves', self)
         self.keysBot.setShortcut('Ctrl+K')
         self.keysBot.setStatusTip('Chaves do Bot - Ctrl+K')
-        self.keysBot.triggered.connect(self.chamarChaves)
+        self.keysBot.triggered.connect(self.chamar_chaves)
         
         self.sobre = QtGui.QAction(QtGui.QIcon(settings.AJUDA), 'Sobre', self)
         self.sobre.setShortcut('Ctrl+H')
         self.sobre.setStatusTip('Sobre o BotWiPy - Ctrl+S')
-        self.sobre.triggered.connect(self.chamarSobre)
+        self.sobre.triggered.connect(self.chamar_sobre)
         
         self.sair = QtGui.QAction(QtGui.QIcon(settings.SAIR), 'Sair', self)
         self.sair.setShortcut('Ctrl+Q')
@@ -95,11 +98,24 @@ class JanelaInicial(QtGui.QMainWindow):
         self.move((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
         self.show()
 
-    def chamarSobre(self):
+    def iniciar_bot(self):
+        while bot.RODAR:
+            time.sleep(2)
+            amigos_tweets = bot.get_amigos_tweets()
+            for tweet in amigos_tweets:
+                usuario = api.verifica_tweet(tweet, 'RT @(.*?):')
+                if usuario is not None:
+                    bot.seguir_usuario(usuario)
+                    self.statusBar.showMessage('{0} começou a seguir {1}'.format(bot.get_meu_nome, usuario))
+
+    def parar_bot(self):
+        bot.RODAR = False
+
+    def chamar_sobre(self):
         exSobre = DialogoSobre()
         exSobre.exec_()
 
-    def chamarChaves(self):
+    def chamar_chaves(self):
         exChaves = DialogoChaves()
         exChaves.exec_()
 
