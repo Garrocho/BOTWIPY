@@ -8,11 +8,17 @@ import time
 import tweepy
 import settings
 
+
 class BotAPI(tweepy.API):
 
     def __init__(self, auth):
         super(BotAPI, self).__init__(auth)
+        self.RODAR = settings.RODAR
 
+        # Adicionado as chaves no oauth.
+        auth = tweepy.OAuthHandler(settings.CONSUMER_KEY, settings.CONSUMER_SECRET)
+        auth.set_access_token(settings.OAUTH_TOKEN, settings.OAUTH_TOKEN_SECRET)
+        
     def get_meu_nome(self):
         return self.me().name()
 
@@ -30,26 +36,3 @@ class BotAPI(tweepy.API):
         if (len(usuario) > 0):
             return usuario[0]
         return None
-
-
-if __name__ == '__main__':
-
-    # Adicionado as chaves no oauth.
-    print 'Definindo Chaves de Acesso do BOT...'
-    auth = tweepy.OAuthHandler(settings.CONSUMER_KEY, settings.CONSUMER_SECRET)
-    auth.set_access_token(settings.OAUTH_TOKEN, settings.OAUTH_TOKEN_SECRET)
-
-    # Conectando a API utilizando os dados da aplicação.
-    print 'Autenticando BOT no AUTH...'
-    api = BotAPI(auth)
-
-    # Verificando as mensagens com Via referência e adicionando esses usuários.
-    print 'Entrando no Loop para Verificar Novos Tweets'
-    while True:
-        time.sleep(2)
-        amigos_tweets = api.get_amigos_tweets()
-        for tweet in amigos_tweets:
-            usuario = api.verifica_tweet(tweet, 'RT @(.*?):')
-            if usuario is not None:
-                api.seguir_usuario(usuario)
-                print '{0} começou a seguir {1}'.format(api.me().name, usuario)
