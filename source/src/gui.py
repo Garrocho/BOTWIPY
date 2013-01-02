@@ -6,10 +6,11 @@
 import sys
 import settings
 import botwipy
+import time
 from PyQt4 import QtGui, QtCore, QtWebKit, Qt
 
 # Conectando a API utilizando os dados da aplicação.
-bot = BotAPI(auth)
+bot = botwipy.BotAPI()
 
 class JanelaInicial(QtGui.QMainWindow):
     """
@@ -99,14 +100,16 @@ class JanelaInicial(QtGui.QMainWindow):
         self.show()
 
     def iniciar_bot(self):
+        bot.RODAR = True
         while bot.RODAR:
-            time.sleep(2)
+            #time.sleep(2)
+            self.statusBar().showMessage('Obtendo Lista de Mensagens')
             amigos_tweets = bot.get_amigos_tweets()
             for tweet in amigos_tweets:
-                usuario = api.verifica_tweet(tweet, 'RT @(.*?):')
+                self.webView.page().mainFrame().evaluateJavaScript('novoElemento("%s")' % (tweet.text,))
+                usuario = bot.verifica_tweet(tweet, 'RT @(.*?):')
                 if usuario is not None:
-                    bot.seguir_usuario(usuario)
-                    self.statusBar.showMessage('{0} começou a seguir {1}'.format(bot.get_meu_nome, usuario))
+                    self.statusBar().showMessage(bot.seguir_usuario(usuario))
 
     def parar_bot(self):
         bot.RODAR = False
