@@ -10,9 +10,8 @@ Este é o pacote do projeto BOTWIPY.
 __version__ = '1.0'
 __author__ = 'Charles Tim Batista Garrocho'
 
-from botwipy import *
-
 __all__ = [
     'botwipy',
+    'gui',
     'settings',
 ]
