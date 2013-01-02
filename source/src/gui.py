@@ -7,23 +7,58 @@ import sys
 import settings
 import botwipy
 import time
+from threading import Thread
 from PyQt4 import QtGui, QtCore, QtWebKit, Qt
 
 # Conectando a API utilizando os dados da aplicação.
 bot = botwipy.BotAPI()
+
+
+class IniciarBot(QtCore.QThread):
+    mensagem_lista = QtCore.pyqtSignal(str)
+    mensagem_status_bar = QtCore.pyqtSignal(str)
+
+    def run(self):
+        while bot.RODAR:
+            self.mensagem_status_bar.emit('Obtendo Lista de Mensagens')
+            amigos_tweets = bot.get_amigos_tweets()
+            for tweet in amigos_tweets:
+                self.mensagem_lista.emit(tweet.text)
+                usuario = bot.verifica_tweet(tweet, 'RT @(.*?):')
+                if usuario is not None:
+                    self.mensagem_status_bar.emit(bot.seguir_usuario(usuario))
+            time.sleep(2)
+
+
+class PararBot(QtCore.QThread):
+    mensagem_status_bar = QtCore.pyqtSignal(str)
+    
+    def run(self):
+        bot.RODAR = False
 
 class JanelaInicial(QtGui.QMainWindow):
     """
     Essa é a Interface gráfica inicial do botwipy. Nela é definido uma barra de
     botões o carregamento de uma lista de um arquivo html e a barra de status.
     """
-    
+
     def __init__(self):
         super(JanelaInicial, self).__init__()
         self.iniciar()
         self.adicionar()
+        self.pIniciar = IniciarBot()
+        self.pIniciar.mensagem_lista.connect(self.recebe_msg_init_lista)
+        self.pIniciar.mensagem_status_bar.connect(self.recebe_msg_init_status)
+        self.pParar = PararBot()
+        self.pParar.mensagem_status_bar.connect(self.recebe_msg_init_status)
         self.configurar()
-        
+   
+    def recebe_msg_init_lista(self, mensagem):
+        self.webView.page().mainFrame().evaluateJavaScript('novoElemento("%s")' % (mensagem,))
+
+    def recebe_msg_init_status(self, mensagem):
+        self.statusBar().showMessage(mensagem)
+
     def iniciar(self):
     
         self.webView = QtWebKit.QWebView()
@@ -98,22 +133,14 @@ class JanelaInicial(QtGui.QMainWindow):
         size = self.geometry()
         self.move((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
         self.show()
-
+    
     def iniciar_bot(self):
         bot.RODAR = True
-        while bot.RODAR:
-            #time.sleep(2)
-            self.statusBar().showMessage('Obtendo Lista de Mensagens')
-            amigos_tweets = bot.get_amigos_tweets()
-            for tweet in amigos_tweets:
-                self.webView.page().mainFrame().evaluateJavaScript('novoElemento("%s")' % (tweet.text,))
-                usuario = bot.verifica_tweet(tweet, 'RT @(.*?):')
-                if usuario is not None:
-                    self.statusBar().showMessage(bot.seguir_usuario(usuario))
+        self.pIniciar.start()
 
     def parar_bot(self):
-        bot.RODAR = False
-
+        self.pParar.start()
+    
     def chamar_sobre(self):
         exSobre = DialogoSobre()
         exSobre.exec_()
