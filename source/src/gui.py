@@ -126,7 +126,7 @@ class JanelaInicial(QtGui.QMainWindow):
     def configurar(self):
         self.toolBar.setMovable(False)
         self.toolBar.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
-        self.setGeometry(600, 600, 650, 500)
+        self.setFixedSize(650, 500)
         self.setWindowTitle('BOTWIPY - Bot em Python Para Twitter')
         self.setWindowIcon(QtGui.QIcon(settings.LOGO))
         screen = QtGui.QDesktopWidget().screenGeometry()
@@ -182,6 +182,10 @@ class DialogoSobre(QtGui.QDialog):
         self.setModal(True)
         self.setWindowTitle('BoTiWiPy - Sobre o Software')
         self.setWindowIcon(QtGui.QIcon(settings.LOGO))
+        self.setFixedSize(410, 215)
+        self.screen = QtGui.QDesktopWidget().screenGeometry()
+        self.size = self.geometry()
+        self.move((self.screen.width() - self.size.width()) / 2, (self.screen.height() - self.size.height()) / 2)
         self.show()
 
 
@@ -213,13 +217,13 @@ class DialogoChaves(QtGui.QDialog):
         self.botaoLimpar = QtGui.QPushButton(QtGui.QIcon(settings.LIMPAR), 'Limpar')
         self.botaoLimpar.setIconSize(QtCore.QSize(30,30));
         
-        self.rotuloConsumerKey = QtGui.QLabel('Consumer Key            ')
+        self.rotuloConsumerKey = QtGui.QLabel('Consumer Key')
         self.campoTextoConsumerKey = QtGui.QLineEdit("")
         
-        self.rotuloConsumerSecret = QtGui.QLabel('Consumer Secret     ')
+        self.rotuloConsumerSecret = QtGui.QLabel('Consumer Secret')
         self.campoTextoConsumerSecret = QtGui.QLineEdit("")
         
-        self.rotuloAcessToken = QtGui.QLabel('Acess Token                ')
+        self.rotuloAcessToken = QtGui.QLabel('Acess Token')
         self.campoTextoAcessToken = QtGui.QLineEdit("")
         
         self.rotuloAcessTokenSecret = QtGui.QLabel('Acess Token Secret')
@@ -256,11 +260,12 @@ class DialogoChaves(QtGui.QDialog):
         self.setModal(True)
         self.setWindowTitle('BoTiWiPy - Chaves de Seguranca')
         self.setWindowIcon(QtGui.QIcon(settings.LOGO))
-        self.setGeometry(400, 400, 400, 240)
+        self.setFixedSize(400, 240)
         self.screen = QtGui.QDesktopWidget().screenGeometry()
         self.size = self.geometry()
         self.move((self.screen.width() - self.size.width()) / 2, (self.screen.height() - self.size.height()) / 2)
         self.show()
+
 
 if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv)
