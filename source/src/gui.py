@@ -169,7 +169,7 @@ class DialogoSobre(QtGui.QDialog):
         self.foto_label = QtGui.QLabel()
         self.foto_label.setPixmap(QtGui.QPixmap(settings.LOGO))
         
-        self.label = QtGui.QLabel('<H3>Informacoes do software</H3> <b>Software: </b>Bot Twitter em Python <br> <b>Versao: </b> 1.0 <br> <b>Copyright: </b>Open Source<br> <H3>Desenvolvedores</H3> <b>Nome: </b>Charles Tim Batista Garrocho <br><b>Contato: </b>charles.garrocho@gmail.com')
+        self.label = QtGui.QLabel('<H3>Informacoes do software</H3> <b>Software: </b>Bot Twitter em Python <br> <b>Versao: </b> 1.0 <br> <b>Copyright: </b>Open Source<br> <H3>Desenvolvedores</H3> Charles Tim Batista Garrocho <br>Paulo Vitor Francisco')
         
     def adicionar(self):
         self.vbox.addWidget(self.foto_label)
