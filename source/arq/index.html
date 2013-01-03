@@ -43,14 +43,16 @@
             function paraBaixo() {
             	document.getElementById('body').scrollTop = document.getElementById('body').scrollHeight;
             }
-            function novoElemento(a)
-            {
+            function novoElemento(a) {
                 var pTag = document.createElement("li");
                 pTag.innerHTML = a;            
                 document.getElementById("list").appendChild(pTag);
                 paraBaixo();
             }
-     
+            function LimparLista() {
+                lista = document.getElementById("list");
+                lista.innerHTML = "";
+            }
         </script>
 
     </head>
@@ -59,5 +61,7 @@
             <ul id="list">
             </ul>
         </div>
+    </body>
+</html>
     </body>
 </html>
