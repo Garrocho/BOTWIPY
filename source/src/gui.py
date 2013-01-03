@@ -78,12 +78,12 @@ class JanelaInicial(QtGui.QMainWindow):
         self.confBot = QtGui.QAction(QtGui.QIcon(settings.CONFIGURAR), 'Configurar', self)
         self.confBot.setShortcut('Ctrl+C')
         self.confBot.setStatusTip('Configurar o Bot - Ctrl+C')
-        self.confBot.triggered.connect(self.close)
+        #self.confBot.triggered.connect(self.close)
         
-        self.atuaBot = QtGui.QAction(QtGui.QIcon(settings.ATUALIZAR), 'Atualizar', self)
+        self.atuaBot = QtGui.QAction(QtGui.QIcon(settings.LIMPAR), 'Limpar', self)
         self.atuaBot.setShortcut('Ctrl+A')
         self.atuaBot.setStatusTip('Atualizar Twitter - Ctrl+A')
-        self.atuaBot.triggered.connect(self.close)
+        self.atuaBot.triggered.connect(self.limpar_lista)
         
         self.keysBot = QtGui.QAction(QtGui.QIcon(settings.CHAVES), 'Chaves', self)
         self.keysBot.setShortcut('Ctrl+K')
@@ -140,6 +140,9 @@ class JanelaInicial(QtGui.QMainWindow):
 
     def parar_bot(self):
         self.pParar.start()
+    
+    def limpar_lista(self):
+        self.webView.page().mainFrame().evaluateJavaScript('LimparLista()')
     
     def chamar_sobre(self):
         exSobre = DialogoSobre()
