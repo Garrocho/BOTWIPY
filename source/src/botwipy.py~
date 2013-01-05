@@ -21,6 +21,29 @@ class BotAPI(tweepy.API):
         auth = tweepy.OAuthHandler(settings.CONSUMER_KEY, settings.CONSUMER_SECRET)
         auth.set_access_token(settings.OAUTH_TOKEN, settings.OAUTH_TOKEN_SECRET)
         super(BotAPI, self).__init__(auth)
+        #####
+        
+        #Requisição para pegar a lista de followers de um usuário.
+	resp = urllib2.urlopen('http://api.twitter.com/1/followers/ids.json?screen_name=%s' % 'botwipy')
+
+	#Carrega a lista de followers para um dicionário.
+	followers = json.loads(resp.read())
+	print 'Identificador -|- Nome -|- Quantidade de seguidores'
+	for follower_id in followers['ids']:
+		#Requisição para pegar os dados do follower. É possível requisitar até 100 usuários por vez.
+		resp = urllib2.urlopen('http://api.twitter.com/1/users/lookup.json?user_id=%s' % follower_id)
+		follower = json.loads(resp.read())[0]
+		print follower['screen_name'], ' -|- ', follower['name'], ' -|- ', follower['followers_count']
+        ''' 
+	mentions = tweepy.API(auth)
+	#lista = mentions.followers()
+	lista = mentions.me()
+	# Para vê-las, você pode executar o seguinte comando
+	print 'Imprimindo seguidores'
+	#for m in lista:
+		#print m, '\n'
+	print lista, '\n'
+	'''
                 
     def get_meu_nome(self):
         return self.me().name
@@ -43,21 +66,3 @@ class BotAPI(tweepy.API):
         if (len(usuario) > 0):
             return usuario[0]
         return None
-
-    def get_followers(self):
-    	try:
-		#Requisição para pegar a lista de followers de um usuário.
-		resp = urllib2.urlopen('http://api.twitter.com/1/followers/ids.json?screen_name=%s' % 'botwipy')
-
-		#Carrega a lista de followers para um dicionário.
-		followers = json.loads(resp.read())
-		print 'Identificador -|- Nome -|- Quantidade de seguidores'
-		for follower_id in followers['ids']:
-			#Requisição para pegar os dados do follower. É possível requisitar até 100 usuários por vez.
-			resp = urllib2.urlopen('http://api.twitter.com/1/users/lookup.json?user_id=%s' % follower_id)
-			follower = json.loads(resp.read())[0]
-			print follower['screen_name'], ' -|- ', follower['name'], ' -|- ', follower['followers_count']
-		return followers
-	except:
-		print 'Erro ao obter lista de followers'
-		return None

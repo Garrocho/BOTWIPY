@@ -28,6 +28,7 @@ class IniciarBot(QtCore.QThread):
                 if usuario is not None:
                     self.mensagem_status_bar.emit(bot.seguir_usuario(usuario))
             time.sleep(2)
+	#bot.get_followers()
 
 
 class PararBot(QtCore.QThread):
@@ -35,7 +36,6 @@ class PararBot(QtCore.QThread):
     
     def run(self):
         bot.RODAR = False
-        bot.get_followers()
 
 class JanelaInicial(QtGui.QMainWindow):
     """
