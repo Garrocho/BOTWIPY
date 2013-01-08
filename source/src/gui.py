@@ -281,29 +281,26 @@ class DialogoFollowers(QtGui.QDialog):
     Essa é a Interface gráfica do dialogo Followers, onde contém uma lista
     com todos os seguidores do Botwipy.
     """
-    
+
     def __init__(self):
         super(DialogoFollowers, self).__init__()
         self.iniciar()
         self.adicionar()
         self.configurar()
-        
+
     def iniciar(self):
         self.vbox = QtGui.QHBoxLayout()                                        
         self.setLayout(self.vbox)
-	self.foto_label = QtGui.QLabel()
-	self.foto_label.setPixmap(QtGui.QPixmap(settings.FOLLOW))
+        self.foto_label = QtGui.QLabel()
+        self.foto_label.setPixmap(QtGui.QPixmap(settings.FOLLOW))
         self.lista = bot.get_followers()
-	self.texto = '<center><h3><b>Lista de Followers</b></center>'
-	if self.lista == None:
-		self.texto += 'Erro ao obter lista de Followers</h3>'
-	else:
-		self.texto += '<ul>'
-		for follower in self.lista:
-			self.texto += '<li>' + str(follower['name']) + '</li>'
-		self.texto += '</ul></h3>'
+        self.texto = '<center><h3><b>Lista de Followers</b></center>'
+        if self.lista is not None:
+            for follower in self.lista:
+                self.texto += '<li>' + str(follower) + '</li>'
+                self.texto += '</ul></h3>'
         self.label = QtGui.QLabel(self.texto)      
-    
+
     def adicionar(self):
         self.vbox.addWidget(self.foto_label)
         self.vbox.addWidget(self.label)
