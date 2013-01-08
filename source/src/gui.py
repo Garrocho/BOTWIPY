@@ -35,7 +35,7 @@ class PararBot(QtCore.QThread):
     
     def run(self):
         bot.RODAR = False
-        bot.get_followers()
+        #bot.get_followers()
 
 class JanelaInicial(QtGui.QMainWindow):
     """
@@ -90,6 +90,11 @@ class JanelaInicial(QtGui.QMainWindow):
         self.keysBot.setShortcut('Ctrl+K')
         self.keysBot.setStatusTip('Chaves do Bot - Ctrl+K')
         self.keysBot.triggered.connect(self.chamar_chaves)
+
+        self.followers = QtGui.QAction(QtGui.QIcon(settings.FOLLOWERS), 'Followers', self)
+        self.followers.setShortcut('Ctrl+H')
+        self.followers.setStatusTip('Lista de Followers - Ctrl+F')
+        self.followers.triggered.connect(self.chamar_followers)
         
         self.sobre = QtGui.QAction(QtGui.QIcon(settings.AJUDA), 'Sobre', self)
         self.sobre.setShortcut('Ctrl+H')
@@ -122,12 +127,14 @@ class JanelaInicial(QtGui.QMainWindow):
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.sobre)
         self.toolBar.addSeparator()
+        self.toolBar.addAction(self.followers)
+        self.toolBar.addSeparator()
         self.toolBar.addAction(self.sair)
 
     def configurar(self):
         self.toolBar.setMovable(False)
         self.toolBar.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
-        self.setFixedSize(650, 500)
+        self.setFixedSize(750, 500)
         self.setWindowTitle('BOTWIPY - Bot em Python Para Twitter')
         self.setWindowIcon(QtGui.QIcon(settings.LOGO))
         screen = QtGui.QDesktopWidget().screenGeometry()
@@ -153,6 +160,9 @@ class JanelaInicial(QtGui.QMainWindow):
         exChaves = DialogoChaves()
         exChaves.exec_()
 
+    def chamar_followers(self):
+        exFollowers = DialogoFollowers()
+        exFollowers.exec_()
 
 class DialogoSobre(QtGui.QDialog):
     """
@@ -172,7 +182,6 @@ class DialogoSobre(QtGui.QDialog):
           
         self.foto_label = QtGui.QLabel()
         self.foto_label.setPixmap(QtGui.QPixmap(settings.LOGO))
-        
         self.label = QtGui.QLabel('<H3>Informacoes do software</H3> <b>Software: </b>Bot Twitter em Python <br> <b>Versao: </b> 1.0 <br> <b>Copyright: </b>Open Source<br> <H3>Desenvolvedores</H3> Charles Tim Batista Garrocho <br>Paulo Vitor Francisco')
         
     def adicionar(self):
@@ -267,6 +276,46 @@ class DialogoChaves(QtGui.QDialog):
         self.move((self.screen.width() - self.size.width()) / 2, (self.screen.height() - self.size.height()) / 2)
         self.show()
 
+class DialogoFollowers(QtGui.QDialog):
+    """
+    Essa é a Interface gráfica do dialogo Followers, onde contém uma lista
+    com todos os seguidores do Botwipy.
+    """
+    
+    def __init__(self):
+        super(DialogoFollowers, self).__init__()
+        self.iniciar()
+        self.adicionar()
+        self.configurar()
+        
+    def iniciar(self):
+        self.vbox = QtGui.QHBoxLayout()                                        
+        self.setLayout(self.vbox)
+	self.foto_label = QtGui.QLabel()
+	self.foto_label.setPixmap(QtGui.QPixmap(settings.FOLLOW))
+        self.lista = bot.get_followers()
+	self.texto = '<center><h3><b>Lista de Followers</b></center>'
+	if self.lista == None:
+		self.texto += 'Erro ao obter lista de Followers</h3>'
+	else:
+		self.texto += '<ul>'
+		for follower in self.lista:
+			self.texto += '<li>' + str(follower['name']) + '</li>'
+		self.texto += '</ul></h3>'
+        self.label = QtGui.QLabel(self.texto)      
+    
+    def adicionar(self):
+        self.vbox.addWidget(self.foto_label)
+        self.vbox.addWidget(self.label)
+
+    def configurar(self):
+        self.setModal(True)
+        self.setWindowTitle('BoTiWiPy - Lista de Followers')
+        self.setFixedSize(610, 415)
+        self.screen = QtGui.QDesktopWidget().screenGeometry()
+        self.size = self.geometry()
+        self.move((self.screen.width() - self.size.width()) / 2, (self.screen.height() - self.size.height()) / 2)
+        self.show()
 
 if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv)

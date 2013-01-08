@@ -4,10 +4,12 @@
 # @copyright: (C) 2012-2013 Python Software Open Source
 
 import re
-#import time
+import time
 import tweepy
 import settings
-import twitter, time, urllib2, json
+import twitter
+import urllib2
+import json
 from os import system
 
 system('clear')
@@ -51,13 +53,13 @@ class BotAPI(tweepy.API):
 
 		#Carrega a lista de followers para um dicionário.
 		followers = json.loads(resp.read())
-		print 'Identificador -|- Nome -|- Quantidade de seguidores'
+		lista = []
 		for follower_id in followers['ids']:
 			#Requisição para pegar os dados do follower. É possível requisitar até 100 usuários por vez.
 			resp = urllib2.urlopen('http://api.twitter.com/1/users/lookup.json?user_id=%s' % follower_id)
 			follower = json.loads(resp.read())[0]
-			print follower['screen_name'], ' -|- ', follower['name'], ' -|- ', follower['followers_count']
-		return followers
+			lista.append(follower)
+		return lista
 	except:
 		print 'Erro ao obter lista de followers'
 		return None
