@@ -45,9 +45,29 @@ class BotAPI(tweepy.API):
             return usuario[0]
         return None
 
-    def get_followers(self):
+    def get_seguidores(self):
         seguidores = tweepy.Cursor(self.followers, id = self.me().id)
         lista = []
         for seguidor in seguidores.items():
             lista.append(seguidor.screen_name)
         return lista
+
+    def get_mensoes(self):
+        minhas_mensoes = tweepy.Cursor(self.mentions).items()
+        lista = []
+        for status in minhas_mensoes:
+            lista.append([status.user.screen_name, status.text])
+        return lista
+
+    def send_mensagem(self, usuario, mensagem):
+        self.send_direct_message(user_id = usuario, text = mensagem)
+
+    def atualizar_status(self, mensagem):
+        self.update_status(mensagem)
+
+
+bot = BotAPI()
+for i in bot.get_mensoes():
+    print i[1]
+    print i[0]
+    bot.atualizar_status(u'@{0} obrigado por me enviar a mensagem {1}'.format(i[0], i[1]))

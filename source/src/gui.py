@@ -293,7 +293,7 @@ class DialogoFollowers(QtGui.QDialog):
         self.setLayout(self.vbox)
         self.foto_label = QtGui.QLabel()
         self.foto_label.setPixmap(QtGui.QPixmap(settings.FOLLOW))
-        self.lista = bot.get_followers()
+        self.lista = bot.get_seguidores()
         self.texto = '<center><h3><b>Lista de Followers</b></center>'
         if self.lista is not None:
             for follower in self.lista:
