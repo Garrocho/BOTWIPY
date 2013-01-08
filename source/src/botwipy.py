@@ -12,7 +12,6 @@ import urllib2
 import json
 from os import system
 
-system('clear')
 
 class BotAPI(tweepy.API):
 
@@ -47,19 +46,8 @@ class BotAPI(tweepy.API):
         return None
 
     def get_followers(self):
-    	try:
-		#Requisição para pegar a lista de followers de um usuário.
-		resp = urllib2.urlopen('http://api.twitter.com/1/followers/ids.json?screen_name=%s' % 'botwipy')
-
-		#Carrega a lista de followers para um dicionário.
-		followers = json.loads(resp.read())
-		lista = []
-		for follower_id in followers['ids']:
-			#Requisição para pegar os dados do follower. É possível requisitar até 100 usuários por vez.
-			resp = urllib2.urlopen('http://api.twitter.com/1/users/lookup.json?user_id=%s' % follower_id)
-			follower = json.loads(resp.read())[0]
-			lista.append(follower)
-		return lista
-	except:
-		print 'Erro ao obter lista de followers'
-		return None
+        seguidores = tweepy.Cursor(self.followers, id = self.me().id)
+        lista = []
+        for seguidor in seguidores.items():
+            lista.append(seguidor.screen_name)
+        return lista
