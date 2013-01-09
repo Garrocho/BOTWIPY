@@ -17,6 +17,7 @@ class BotAPI(tweepy.API):
 
     def __init__(self):
         self.RODAR = settings.RODAR
+        self.MENSOES = settings.MENSOES
 
         # Adicionado as chaves no oauth.
         auth = tweepy.OAuthHandler(settings.CONSUMER_KEY, settings.CONSUMER_SECRET)
@@ -35,9 +36,9 @@ class BotAPI(tweepy.API):
     def seguir_usuario(self, usuario):
         try:
             self.get_user(usuario).follow()
-            return '{0} comecou a seguir {1}'.format(self.get_meu_nome(), usuario)
+            return 'comecou a seguir {0}'.format(usuario)
         except:
-            return '{0} nao conseguiu seguir {1}'.format(self.get_meu_nome(), usuario)
+            return 'nao conseguiu seguir {0}'.format(usuario)
 
     def verifica_tweet(self, tweet, condicao):
         usuario = re.findall(r'{0}'.format(condicao), tweet.text)
@@ -56,7 +57,7 @@ class BotAPI(tweepy.API):
         minhas_mensoes = tweepy.Cursor(self.mentions).items()
         lista = []
         for status in minhas_mensoes:
-            lista.append([status.user.screen_name, status.text])
+            lista.append([status.user.id, status.user.screen_name, status.text])
         return lista
 
     def send_mensagem(self, usuario, mensagem):
@@ -64,10 +65,3 @@ class BotAPI(tweepy.API):
 
     def atualizar_status(self, mensagem):
         self.update_status(mensagem)
-
-
-bot = BotAPI()
-for i in bot.get_mensoes():
-    print i[1]
-    print i[0]
-    bot.atualizar_status(u'@{0} obrigado por me enviar a mensagem {1}'.format(i[0], i[1]))
