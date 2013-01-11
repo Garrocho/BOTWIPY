@@ -26,6 +26,9 @@ class BotAPI(tweepy.API):
                 
     def get_meu_nome(self):
         return self.me().name
+        
+    def get_meu_status(self):
+        return self.get_status(self.me().id).text
 
     def get_meus_tweets(self):
         return tweepy.Cursor(self.user_timeline).items()
