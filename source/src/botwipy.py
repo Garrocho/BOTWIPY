@@ -46,7 +46,7 @@ class BotAPI(tweepy.API):
     def verifica_tweet(self, tweet, condicao):
         usuario = re.findall(r'{0}'.format(condicao), tweet.text)
         if (len(usuario) > 0):
-            return usuario[0]
+            return [usuario[0], tweet.created_at]
         return None
 
     def get_seguidores(self):
@@ -67,4 +67,7 @@ class BotAPI(tweepy.API):
         self.send_direct_message(user_id = usuario, text = mensagem)
 
     def atualizar_status(self, mensagem):
-        self.update_status(mensagem)
+        try:
+            self.update_status(mensagem)
+        except:
+            pass
