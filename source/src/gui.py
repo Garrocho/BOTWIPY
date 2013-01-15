@@ -25,11 +25,11 @@ class IniciarBot(QtCore.QThread):
             for tweet in amigos_tweets:
                 self.mensagem_status_bar.emit(tweet.text)
                 usuario = bot.verifica_tweet(tweet, 'RT @(.*?):')
-                if usuario is not None: 
-                    self.mensagem_lista.emit('<b>{0}</b> <br> {1}'.format(bot.get_meu_nome(), bot.seguir_usuario(usuario[0])))
+                if usuario is not None:
+                    self.mensagem_lista.emit('<b style="float:left">{0}</b><i style="float:right"> <font color="#20B2AA">{1}</font> </i> <br>{2}'.format(bot.get_meu_nome(), usuario[1], bot.seguir_usuario(usuario[0])))
             self.mensagem_status_bar.emit('Obtendo Lista de Minhas Mensoes')
             for usuario in bot.get_mensoes():
-                self.mensagem_lista.emit('<b>{0}</b> <br> {1}'.format(bot.get_meu_nome(), bot.seguir_usuario(usuario[0])))
+                self.mensagem_lista.emit('<b>{0}</b> <br> {1}'.format(bot.get_meu_nome(), bot.seguir_usuario(usuario[1])))
                 novo_status = u'Ola @{0}. Obrigado pela sua mensagem! :-)'.format(usuario[1])
                 self.mensagem_lista.emit('<b>{0}</b> <br> Atualizou seu Status para: {1}'.format(bot.get_meu_nome(), novo_status))
                 bot.atualizar_status(novo_status)
@@ -136,7 +136,7 @@ class JanelaInicial(QtGui.QMainWindow):
     def configurar(self):
         self.toolBar.setMovable(False)
         self.toolBar.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
-        self.setFixedSize(750, 500)
+        self.setFixedSize(750, 700)
         self.setWindowTitle('BOTWIPY - Bot em Python Para Twitter')
         self.setWindowIcon(QtGui.QIcon(settings.LOGO))
         screen = QtGui.QDesktopWidget().screenGeometry()
