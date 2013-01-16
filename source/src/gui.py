@@ -43,6 +43,7 @@ class PararBot(QtCore.QThread):
         bot.RODAR = False
         #bot.get_followers()
 
+
 class JanelaInicial(QtGui.QMainWindow):
     """
     Essa é a Interface gráfica inicial do botwipy. Nela é definido uma barra de
@@ -206,6 +207,7 @@ class DialogoChaves(QtGui.QDialog):
     Essa é a Interface gráfica do dialogo de definição de chaves para o acesso
     a conta twitter. Nela é definido vários rótulos e campos de texto e botões.
     """
+    # re.sub("JegRGulzhvp09grgBtPNaMeuvyPvYKwTkPRrz0X1c", "KKKKKKKKKKKKKKKKKKKKKKKKKKK", a)
     
     def __init__(self):
         super(DialogoChaves, self).__init__()
@@ -230,17 +232,17 @@ class DialogoChaves(QtGui.QDialog):
         self.botaoLimpar.setIconSize(QtCore.QSize(30,30));
         
         self.rotuloConsumerKey = QtGui.QLabel('Consumer Key')
-        self.campoTextoConsumerKey = QtGui.QLineEdit("")
+        self.campoTextoConsumerKey = QtGui.QLineEdit(settings.CONSUMER_KEY)
         
         self.rotuloConsumerSecret = QtGui.QLabel('Consumer Secret')
-        self.campoTextoConsumerSecret = QtGui.QLineEdit("")
+        self.campoTextoConsumerSecret = QtGui.QLineEdit(settings.CONSUMER_SECRET)
         
         self.rotuloAcessToken = QtGui.QLabel('Acess Token')
-        self.campoTextoAcessToken = QtGui.QLineEdit("")
+        self.campoTextoAcessToken = QtGui.QLineEdit(settings.OAUTH_TOKEN)
         
         self.rotuloAcessTokenSecret = QtGui.QLabel('Acess Token Secret')
-        self.campoTextoAcessTokenSecret = QtGui.QLineEdit("")
-        
+        self.campoTextoAcessTokenSecret = QtGui.QLineEdit(settings.OAUTH_TOKEN_SECRET)
+
     def adicionar(self):
         self.boxTotal.addWidget(QtGui.QLabel('<b>Defina</b> abaixo as chaves de seguranca da <b>conta Twitter</b>'))
         self.boxRotulo.addWidget(self.rotuloConsumerKey)
