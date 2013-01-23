@@ -4,6 +4,9 @@
 
 import os
 
+# Nome do Arquivo Atual "Settings".
+NOME = os.path.abspath(__file__)
+
 # Defina Aqui o Estado Inicial do Bot
 RODAR = False
 MENSOES = False
@@ -39,4 +42,3 @@ LIMPAR = '{0}/{1}/{2}'.format(PATH, ICON, 'LIMPAR.png')
 
 # Endereco de arquivo do projeto.
 HTML = '{0}/{1}/{2}'.format(PATH, ARQ, 'index.html')
-
