@@ -7,7 +7,6 @@ import re
 import time
 import tweepy
 import settings
-import twitter
 import urllib2
 import json
 from os import system
