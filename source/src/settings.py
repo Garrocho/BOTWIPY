@@ -4,8 +4,8 @@
 
 import os
 
-# Nome do Arquivo Atual "Settings".
-NOME = os.path.abspath(__file__)
+# Nome do Arquivo Atual.
+NOME = '{0}.py'.format(os.path.abspath(__file__).split('.')[0])
 
 # Defina Aqui o Estado Inicial do Bot
 RODAR = False
