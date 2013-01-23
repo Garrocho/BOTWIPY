@@ -217,12 +217,15 @@ class DialogoChaves(QtGui.QDialog):
         
         self.botaoGravar = QtGui.QPushButton(QtGui.QIcon(settings.GRAVAR), 'Gravar')
         self.botaoGravar.setIconSize(QtCore.QSize(30,30));
+        self.botaoGravar.clicked.connect(self.gravar)
         
         self.botaoCancelar = QtGui.QPushButton(QtGui.QIcon(settings.CANCELAR), 'Cancelar')
         self.botaoCancelar.setIconSize(QtCore.QSize(30,30));
+        self.botaoCancelar.clicked.connect(self.close)
         
         self.botaoLimpar = QtGui.QPushButton(QtGui.QIcon(settings.LIMPAR), 'Limpar')
         self.botaoLimpar.setIconSize(QtCore.QSize(30,30));
+        self.botaoLimpar.clicked.connect(self.limpar)
         
         self.rotuloConsumerKey = QtGui.QLabel('Consumer Key')
         self.campoTextoConsumerKey = QtGui.QLineEdit(settings.CONSUMER_KEY)
@@ -240,27 +243,25 @@ class DialogoChaves(QtGui.QDialog):
         self.boxTotal.addWidget(QtGui.QLabel('<b>Defina</b> abaixo as chaves de seguranca da <b>conta Twitter</b>'))
         self.boxRotulo.addWidget(self.rotuloConsumerKey)
         self.boxCampo.addWidget(self.campoTextoConsumerKey)
-        
+
         self.boxRotulo.addWidget(self.rotuloConsumerSecret)
         self.boxCampo.addWidget(self.campoTextoConsumerSecret)
-        
+
         self.boxRotulo.addWidget(self.rotuloAcessToken)
         self.boxCampo.addWidget(self.campoTextoAcessToken)
-        
+
         self.boxRotulo.addWidget(self.rotuloAcessTokenSecret)
         self.boxCampo.addWidget(self.campoTextoAcessTokenSecret)
-        
+
         self.boxBotao.addWidget(self.botaoGravar)
         self.boxBotao.addWidget(self.botaoLimpar)
         self.boxBotao.addWidget(self.botaoCancelar)
 
         self.boxRotuloCampo.addLayout(self.boxRotulo)
         self.boxRotuloCampo.addLayout(self.boxCampo)
-        
-        self.boxTotal.addLayout(self.boxRotuloCampo)
 
+        self.boxTotal.addLayout(self.boxRotuloCampo)
         self.boxTotal.addLayout(self.boxBotao)
-        
         self.setLayout(self.boxTotal)
 
     def configurar(self):
@@ -274,8 +275,20 @@ class DialogoChaves(QtGui.QDialog):
         self.show()
 
     def gravar(self):
-        # re.sub("JegRGulzhvp09grgBtPNaMeuvyPvYKwTkPRrz0X1c", "KKKKKKKKKKKKKKKKKKKKKKKKKKK", a)
-        self.campoTextoConsumerSecret.text()
+        a = open('teste.txt').read()
+        a = re.sub(settings.CONSUMER_KEY, str(self.campoTextoConsumerKey.text()), a)
+        a = re.sub(settings.CONSUMER_SECRET, str(self.campoTextoConsumerSecret.text()), a)
+        a = re.sub(settings.OAUTH_TOKEN, str(self.campoTextoAcessToken.text()), a)
+        a = re.sub(settings.OAUTH_TOKEN_SECRET, str(self.campoTextoAcessTokenSecret.text()), a)
+        arq = open('teste.txt', 'w')
+        arq.write(a)
+        arq.close()
+
+    def limpar(self):
+        self.campoTextoConsumerKey.setText('')
+        self.campoTextoConsumerSecret.setText('')
+        self.campoTextoAcessToken.setText('')
+        self.campoTextoAcessTokenSecret.setText('')
 
 
 if __name__ == '__main__':
