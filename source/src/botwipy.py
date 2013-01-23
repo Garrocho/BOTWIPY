@@ -9,7 +9,6 @@ import tweepy
 import settings
 import urllib2
 import json
-from os import system
 
 
 class BotAPI(tweepy.API):
