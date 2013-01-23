@@ -3,10 +3,11 @@
 # @contact: charles.garrocho@gmail.com
 # @copyright: (C) 2012-2013 Python Software Open Source
 
+import re
 import sys
+import time
 import settings
 import botwipy
-import time
 from threading import Thread
 from PyQt4 import QtGui, QtCore, QtWebKit, Qt
 
@@ -97,11 +98,6 @@ class JanelaInicial(QtGui.QMainWindow):
         self.keysBot.setShortcut('Ctrl+K')
         self.keysBot.setStatusTip('Chaves do Bot - Ctrl+K')
         self.keysBot.triggered.connect(self.chamar_chaves)
-
-        self.followers = QtGui.QAction(QtGui.QIcon(settings.FOLLOWERS), 'Followers', self)
-        self.followers.setShortcut('Ctrl+H')
-        self.followers.setStatusTip('Lista de Followers - Ctrl+F')
-        self.followers.triggered.connect(self.chamar_followers)
         
         self.sobre = QtGui.QAction(QtGui.QIcon(settings.AJUDA), 'Sobre', self)
         self.sobre.setShortcut('Ctrl+H')
@@ -130,14 +126,12 @@ class JanelaInicial(QtGui.QMainWindow):
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.sobre)
         self.toolBar.addSeparator()
-        self.toolBar.addAction(self.followers)
-        self.toolBar.addSeparator()
         self.toolBar.addAction(self.sair)
 
     def configurar(self):
         self.toolBar.setMovable(False)
         self.toolBar.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
-        self.setFixedSize(750, 700)
+        self.setFixedSize(620, 700)
         self.setWindowTitle('BOTWIPY - Bot em Python Para Twitter')
         self.setWindowIcon(QtGui.QIcon(settings.LOGO))
         screen = QtGui.QDesktopWidget().screenGeometry()
@@ -207,7 +201,6 @@ class DialogoChaves(QtGui.QDialog):
     Essa é a Interface gráfica do dialogo de definição de chaves para o acesso
     a conta twitter. Nela é definido vários rótulos e campos de texto e botões.
     """
-    # re.sub("JegRGulzhvp09grgBtPNaMeuvyPvYKwTkPRrz0X1c", "KKKKKKKKKKKKKKKKKKKKKKKKKKK", a)
     
     def __init__(self):
         super(DialogoChaves, self).__init__()
@@ -236,7 +229,7 @@ class DialogoChaves(QtGui.QDialog):
         
         self.rotuloConsumerSecret = QtGui.QLabel('Consumer Secret')
         self.campoTextoConsumerSecret = QtGui.QLineEdit(settings.CONSUMER_SECRET)
-        
+
         self.rotuloAcessToken = QtGui.QLabel('Acess Token')
         self.campoTextoAcessToken = QtGui.QLineEdit(settings.OAUTH_TOKEN)
         
@@ -280,43 +273,10 @@ class DialogoChaves(QtGui.QDialog):
         self.move((self.screen.width() - self.size.width()) / 2, (self.screen.height() - self.size.height()) / 2)
         self.show()
 
-class DialogoFollowers(QtGui.QDialog):
-    """
-    Essa é a Interface gráfica do dialogo Followers, onde contém uma lista
-    com todos os seguidores do Botwipy.
-    """
+    def gravar(self):
+        # re.sub("JegRGulzhvp09grgBtPNaMeuvyPvYKwTkPRrz0X1c", "KKKKKKKKKKKKKKKKKKKKKKKKKKK", a)
+        self.campoTextoConsumerSecret.text()
 
-    def __init__(self):
-        super(DialogoFollowers, self).__init__()
-        self.iniciar()
-        self.adicionar()
-        self.configurar()
-
-    def iniciar(self):
-        self.vbox = QtGui.QHBoxLayout()                                        
-        self.setLayout(self.vbox)
-        self.foto_label = QtGui.QLabel()
-        self.foto_label.setPixmap(QtGui.QPixmap(settings.FOLLOW))
-        self.lista = bot.get_seguidores()
-        self.texto = '<center><h3><b>Lista de Followers</b></center>'
-        if self.lista is not None:
-            for follower in self.lista:
-                self.texto += '<li>' + str(follower) + '</li>'
-                self.texto += '</ul></h3>'
-        self.label = QtGui.QLabel(self.texto)      
-
-    def adicionar(self):
-        self.vbox.addWidget(self.foto_label)
-        self.vbox.addWidget(self.label)
-
-    def configurar(self):
-        self.setModal(True)
-        self.setWindowTitle('BoTiWiPy - Lista de Followers')
-        self.setFixedSize(610, 415)
-        self.screen = QtGui.QDesktopWidget().screenGeometry()
-        self.size = self.geometry()
-        self.move((self.screen.width() - self.size.width()) / 2, (self.screen.height() - self.size.height()) / 2)
-        self.show()
 
 if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv)
