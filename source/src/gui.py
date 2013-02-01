@@ -12,6 +12,7 @@ from threading import Thread
 from PyQt4 import QtGui, QtCore, QtWebKit, Qt
 
 # Conectando a API utilizando os dados da aplicação.
+global bot
 bot = botwipy.BotAPI()
 
 
@@ -42,7 +43,6 @@ class PararBot(QtCore.QThread):
     
     def run(self):
         bot.RODAR = False
-        #bot.get_followers()
 
 
 class JanelaInicial(QtGui.QMainWindow):
@@ -131,7 +131,7 @@ class JanelaInicial(QtGui.QMainWindow):
     def configurar(self):
         self.toolBar.setMovable(False)
         self.toolBar.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
-        self.setFixedSize(620, 700)
+        self.setFixedSize(670, 600)
         self.setWindowTitle('BOTWIPY - Bot em Python Para Twitter')
         self.setWindowIcon(QtGui.QIcon(settings.LOGO))
         screen = QtGui.QDesktopWidget().screenGeometry()
@@ -141,7 +141,11 @@ class JanelaInicial(QtGui.QMainWindow):
     
     def iniciar_bot(self):
         bot.RODAR = True
-        self.pIniciar.start()
+
+        if bot.carrega_api() == True:
+            self.pIniciar.start()
+        else:
+            QtGui.QMessageBox.about(self, "Erro", "Chaves Incorretas")
 
     def parar_bot(self):
         self.pParar.start()
@@ -228,16 +232,16 @@ class DialogoChaves(QtGui.QDialog):
         self.botaoLimpar.clicked.connect(self.limpar)
         
         self.rotuloConsumerKey = QtGui.QLabel('Consumer Key')
-        self.campoTextoConsumerKey = QtGui.QLineEdit(settings.CONSUMER_KEY)
+        self.campoTextoConsumerKey = QtGui.QLineEdit(bot.redis.get('CONSUMER_KEY'))
         
         self.rotuloConsumerSecret = QtGui.QLabel('Consumer Secret')
-        self.campoTextoConsumerSecret = QtGui.QLineEdit(settings.CONSUMER_SECRET)
+        self.campoTextoConsumerSecret = QtGui.QLineEdit(bot.redis.get('CONSUMER_SECRET'))
 
         self.rotuloAcessToken = QtGui.QLabel('Acess Token')
-        self.campoTextoAcessToken = QtGui.QLineEdit(settings.OAUTH_TOKEN)
+        self.campoTextoAcessToken = QtGui.QLineEdit(bot.redis.get('OAUTH_TOKEN'))
         
         self.rotuloAcessTokenSecret = QtGui.QLabel('Acess Token Secret')
-        self.campoTextoAcessTokenSecret = QtGui.QLineEdit(settings.OAUTH_TOKEN_SECRET)
+        self.campoTextoAcessTokenSecret = QtGui.QLineEdit(bot.redis.get('OAUTH_TOKEN_SECRET'))
 
     def adicionar(self):
         self.boxTotal.addWidget(QtGui.QLabel('<b>Defina</b> abaixo as chaves de seguranca da <b>conta Twitter</b>'))
@@ -275,14 +279,34 @@ class DialogoChaves(QtGui.QDialog):
         self.show()
 
     def gravar(self):
-        a = open('teste.txt').read()
-        a = re.sub(settings.CONSUMER_KEY, str(self.campoTextoConsumerKey.text()), a)
-        a = re.sub(settings.CONSUMER_SECRET, str(self.campoTextoConsumerSecret.text()), a)
-        a = re.sub(settings.OAUTH_TOKEN, str(self.campoTextoAcessToken.text()), a)
-        a = re.sub(settings.OAUTH_TOKEN_SECRET, str(self.campoTextoAcessTokenSecret.text()), a)
-        arq = open('teste.txt', 'w')
-        arq.write(a)
-        arq.close()
+        c_k = str(self.campoTextoConsumerKey.text())
+        c_s_k = str(self.campoTextoConsumerSecret.text())
+        o_t = str(self.campoTextoAcessToken.text())
+        o_t_s = str(self.campoTextoAcessTokenSecret.text())
+
+        if len(c_k) != 0 and len(c_s_k) != 0 and len(o_t) != 0 and len(o_t_s) != 0:
+
+            a = open(settings.NOME).read()
+            a = re.sub(settings.CONSUMER_KEY, c_k, a)
+            a = re.sub(settings.CONSUMER_SECRET, c_s_k, a)
+            a = re.sub(settings.OAUTH_TOKEN, o_t, a)
+            a = re.sub(settings.OAUTH_TOKEN_SECRET, o_t_s, a)
+            arq = open(settings.NOME, 'w')
+            arq.write(a)
+            arq.close()
+
+            bot.redis.set('CONSUMER_KEY', c_k)
+            bot.redis.set('CONSUMER_SECRET', c_s_k)
+            bot.redis.set('OAUTH_TOKEN', o_t)
+            bot.redis.set('OAUTH_TOKEN_SECRET', o_t_s)
+
+            if bot.carrega_api() == True:
+                QtGui.QMessageBox.about(self, "Sucesso", "Chaves Configuradas")
+                self.close()
+            else:
+                QtGui.QMessageBox.about(self, "Atencao", "Dados Informados Incorretos")
+        else:
+            QtGui.QMessageBox.about(self, "Atencao", "Dados Incompletos")
 
     def limpar(self):
         self.campoTextoConsumerKey.setText('')
