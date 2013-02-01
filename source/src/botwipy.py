@@ -9,34 +9,49 @@ import tweepy
 import settings
 import urllib2
 import json
+from redis import Redis
 
 
-class BotAPI(tweepy.API):
+class BotAPI():
 
     def __init__(self):
         self.RODAR = settings.RODAR
         self.MENSOES = settings.MENSOES
 
-        # Adicionado as chaves no oauth.
-        auth = tweepy.OAuthHandler(settings.CONSUMER_KEY, settings.CONSUMER_SECRET)
-        auth.set_access_token(settings.OAUTH_TOKEN, settings.OAUTH_TOKEN_SECRET)
-        super(BotAPI, self).__init__(auth)
-                
+        self.redis = Redis()
+        self.redis.set('CONSUMER_KEY', settings.CONSUMER_KEY)
+        self.redis.set('CONSUMER_SECRET', settings.CONSUMER_SECRET)
+        self.redis.set('OAUTH_TOKEN', settings.OAUTH_TOKEN)
+        self.redis.set('OAUTH_TOKEN_SECRET', settings.OAUTH_TOKEN_SECRET)
+
+    def carrega_api(self):
+        auth = tweepy.OAuthHandler(self.redis.get('CONSUMER_KEY'), self.redis.get('CONSUMER_SECRET'), self.redis.get('OAUTH_TOKEN'))
+        auth.set_access_token(self.redis.get('OAUTH_TOKEN'), self.redis.get('OAUTH_TOKEN_SECRET'))
+        self.api = tweepy.API(auth)
+
+        if self.get_meu_nome() == None:
+            return False
+        else:
+            return True
+
     def get_meu_nome(self):
-        return self.me().name
+        try:
+            return self.api.me().name
+        except:
+            return None
         
     def get_meu_status(self):
-        return self.get_status(self.me().id).text
+        return self.api.get_status(self.api.me().id).text
 
     def get_meus_tweets(self):
-        return tweepy.Cursor(self.user_timeline).items()
+        return tweepy.Cursor(self.api.user_timeline).items()
 
     def get_amigos_tweets(self):
-        return self.friends_timeline()
+        return self.api.friends_timeline()
 
     def seguir_usuario(self, usuario):
         try:
-            self.get_user(usuario).follow()
+            self.api.get_user(usuario).follow()
             return 'comecou a seguir {0}'.format(usuario)
         except:
             return 'nao conseguiu seguir {0}'.format(usuario)
@@ -48,24 +63,24 @@ class BotAPI(tweepy.API):
         return None
 
     def get_seguidores(self):
-        seguidores = tweepy.Cursor(self.followers, id = self.me().id)
+        seguidores = tweepy.Cursor(self.api.followers, id = self.api.me().id)
         lista = []
         for seguidor in seguidores.items():
             lista.append(seguidor.screen_name)
         return lista
 
     def get_mensoes(self):
-        minhas_mensoes = tweepy.Cursor(self.mentions).items()
+        minhas_mensoes = tweepy.Cursor(self.api.mentions).items()
         lista = []
         for status in minhas_mensoes:
             lista.append([status.user.id, status.user.screen_name, status.text])
         return lista
 
     def send_mensagem(self, usuario, mensagem):
-        self.send_direct_message(user_id = usuario, text = mensagem)
+        self.api.send_direct_message(user_id = usuario, text = mensagem)
 
     def atualizar_status(self, mensagem):
         try:
-            self.update_status(mensagem)
+            self.api.update_status(mensagem)
         except:
             pass
