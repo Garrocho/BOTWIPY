@@ -41,7 +41,7 @@ class IniciarBot(QtCore.QThread):
                     novo_status = u'Ola @{0}. Obrigado pela sua mensagem! :-)'.format(usuario[1])
                     self.mensagem_lista.emit('<b>{0}</b> <br> Atualizou seu Status para: {1}'.format(bot.get_meu_nome(), novo_status))
                     bot.atualizar_status(novo_status)
-            time.sleep(4)
+            time.sleep(bot.INTERVALO)
 
 
 class PararBot(QtCore.QThread):
@@ -410,6 +410,7 @@ class DialogoPreferencias(QtGui.QDialog):
             bot.MSG_SEG = True
         else:
             bot.MSG_SEG = False
+        bot.INTERVALO = int(self.sld.value()) + 1
 
 
 if __name__ == '__main__':
