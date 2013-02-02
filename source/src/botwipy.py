@@ -29,6 +29,10 @@ class BotAPI():
         self.redis.set('OAUTH_TOKEN', settings.OAUTH_TOKEN)
         self.redis.set('OAUTH_TOKEN_SECRET', settings.OAUTH_TOKEN_SECRET)
 
+        auth = tweepy.OAuthHandler(self.redis.get('CONSUMER_KEY'), self.redis.get('CONSUMER_SECRET'), self.redis.get('OAUTH_TOKEN'))
+        auth.set_access_token(self.redis.get('OAUTH_TOKEN'), self.redis.get('OAUTH_TOKEN_SECRET'))
+        self.api = tweepy.API(auth)
+
     def carrega_api(self):
         auth = tweepy.OAuthHandler(self.redis.get('CONSUMER_KEY'), self.redis.get('CONSUMER_SECRET'), self.redis.get('OAUTH_TOKEN'))
         auth.set_access_token(self.redis.get('OAUTH_TOKEN'), self.redis.get('OAUTH_TOKEN_SECRET'))
