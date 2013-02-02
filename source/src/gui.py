@@ -3,6 +3,10 @@
 # @contact: charles.garrocho@gmail.com
 # @copyright: (C) 2012-2013 Python Software Open Source
 
+"""
+Modulo responsavel pelas interfaces graficas utilizadas no software.
+"""
+
 import re
 import sys
 import time
@@ -17,6 +21,9 @@ bot = botwipy.BotAPI()
 
 
 class IniciarBot(QtCore.QThread):
+    """
+    Processo responsavel por iniciar e analizar as mensagens do BoTWiPy.
+    """
     mensagem_lista = QtCore.pyqtSignal(str)
     mensagem_status_bar = QtCore.pyqtSignal(str)
 
@@ -50,6 +57,9 @@ class IniciarBot(QtCore.QThread):
 
 
 class PararBot(QtCore.QThread):
+    """
+    Processo responsavel por parar a execucao do BoTWiPy
+    """
     mensagem_status_bar = QtCore.pyqtSignal(str)
     
     def run(self):
