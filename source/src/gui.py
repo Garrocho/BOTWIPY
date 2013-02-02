@@ -21,27 +21,31 @@ class IniciarBot(QtCore.QThread):
     mensagem_status_bar = QtCore.pyqtSignal(str)
 
     def run(self):
-        while bot.RODAR:
 
-            if bot.MSG_SEG == True:
-                self.mensagem_status_bar.emit('Obtendo Lista de Mensagens dos Meus Seguidores')
-                amigos_tweets = bot.get_amigos_tweets()
-                for tweet in amigos_tweets:
-                    self.mensagem_status_bar.emit(tweet.text)
-                    usuario = bot.verifica_tweet(tweet, 'RT @(.*?):')
-                    if usuario is not None:
-                        seguir = bot.seguir_usuario(usuario[0])
-                        print seguir
-                        self.mensagem_lista.emit('<b>{0}</b><i> <font>{1}</font> </i> <br>{2}'.format(bot.get_meu_nome(), usuario[1], seguir))
+        if bot.get_meu_nome() != None:
+            while bot.RODAR:
 
-            if bot.MENSOES == True:
-                self.mensagem_status_bar.emit('Obtendo Lista de Minhas Mensoes')
-                for usuario in bot.get_mensoes():
-                    self.mensagem_lista.emit('<b>{0}</b> <br> {1}'.format(bot.get_meu_nome(), bot.seguir_usuario(usuario[1])))
-                    novo_status = u'Ola @{0}. Obrigado pela sua mensagem! :-)'.format(usuario[1])
-                    self.mensagem_lista.emit('<b>{0}</b> <br> Atualizou seu Status para: {1}'.format(bot.get_meu_nome(), novo_status))
-                    bot.atualizar_status(novo_status)
-            time.sleep(bot.INTERVALO)
+                if bot.MSG_SEG == True:
+                    self.mensagem_status_bar.emit('Obtendo Lista de Mensagens dos Meus Seguidores')
+                    amigos_tweets = bot.get_amigos_tweets()
+                    for tweet in amigos_tweets:
+                        self.mensagem_status_bar.emit(tweet.text)
+                        usuario = bot.verifica_tweet(tweet, 'RT @(.*?):')
+                        if usuario is not None:
+                            seguir = bot.seguir_usuario(usuario[0])
+                            print seguir
+                            self.mensagem_lista.emit('<b>{0}</b><i> <font>{1}</font> </i> <br>{2}'.format(bot.get_meu_nome(), usuario[1], seguir))
+
+                if bot.MENSOES == True:
+                    self.mensagem_status_bar.emit('Obtendo Lista de Minhas Mensoes')
+                    for usuario in bot.get_mensoes():
+                        self.mensagem_lista.emit('<b>{0}</b> <br> {1}'.format(bot.get_meu_nome(), bot.seguir_usuario(usuario[1])))
+                        novo_status = u'Ola @{0}. Obrigado pela sua mensagem! :-)'.format(usuario[1])
+                        self.mensagem_lista.emit('<b>{0}</b> <br> Atualizou seu Status para: {1}'.format(bot.get_meu_nome(), novo_status))
+                        bot.atualizar_status(novo_status)
+                time.sleep(bot.INTERVALO)
+        else:
+            self.mensagem_status_bar.emit('ERRO')
 
 
 class PararBot(QtCore.QThread):
@@ -68,13 +72,21 @@ class JanelaInicial(QtGui.QMainWindow):
         self.pParar = PararBot()
         self.pParar.mensagem_status_bar.connect(self.recebe_msg_init_status)
 
+        if bot.INIT == True:
+            self.iniciar_bot()
+        else:
+            self.parar_bot()
+
         self.configurar()
    
     def recebe_msg_init_lista(self, mensagem):
         self.webView.page().mainFrame().evaluateJavaScript('novoElemento("%s")' % (mensagem,))
 
     def recebe_msg_init_status(self, mensagem):
-        self.statusBar().showMessage(mensagem)
+        if mensagem == 'ERRO':
+            QtGui.QMessageBox.about(self, "Erro", "Impossivel Iniciar o BoTWiPy\nChaves Incorretas")
+        else:
+            self.statusBar().showMessage(mensagem)
 
     def iniciar(self):
     
@@ -149,11 +161,7 @@ class JanelaInicial(QtGui.QMainWindow):
     
     def iniciar_bot(self):
         bot.RODAR = True
-
-        if bot.carrega_api() == True:
-            self.pIniciar.start()
-        else:
-            QtGui.QMessageBox.about(self, "Erro", "Chaves Incorretas")
+        self.pIniciar.start()
 
     def parar_bot(self):
         self.pParar.start()
@@ -335,6 +343,7 @@ class DialogoPreferencias(QtGui.QDialog):
         super(DialogoPreferencias, self).__init__()
         self.iniciar()
         self.adicionar()
+        self.sld.setValue(bot.INTERVALO)
         self.configurar()
         
     def iniciar(self):
@@ -344,13 +353,16 @@ class DialogoPreferencias(QtGui.QDialog):
         self.boxBotao = QtGui.QHBoxLayout()
 
         self.checkBoxRoda = QtGui.QCheckBox('Iniciar BoTWiPy ao executar', self)
-        self.checkBoxRoda.toggle()
+        if bot.INIT == True:
+            self.checkBoxRoda.toggle()
 
         self.checkBoxMensoes = QtGui.QCheckBox('Analizar Mensoes ao BoTWiPy', self)
-        self.checkBoxMensoes.toggle()
+        if bot.MENSOES == True:
+            self.checkBoxMensoes.toggle()
 
         self.checkBoxMsgSeg = QtGui.QCheckBox('Analizar Mensagens Followers', self)
-        self.checkBoxMsgSeg.toggle()
+        if bot.MSG_SEG == True:
+            self.checkBoxMsgSeg.toggle()
 
         self.botaoGravar = QtGui.QPushButton(QtGui.QIcon(settings.GRAVAR), 'Gravar')
         self.botaoGravar.setIconSize(QtCore.QSize(30,30));
@@ -425,6 +437,9 @@ class DialogoPreferencias(QtGui.QDialog):
         arq = open(settings.NOME, 'w')
         arq.write(a)
         arq.close()
+
+        QtGui.QMessageBox.about(self, "Sucesso", "Preferencias Salvas")
+        self.close()
 
 
 if __name__ == '__main__':
