@@ -22,7 +22,8 @@ class IniciarBot(QtCore.QThread):
 
     def run(self):
 
-        if bot.get_meu_nome() != None:
+        self.mensagem_status_bar.emit('Analizando as Chaves do BoTWiPy')
+        if bot.carrega_api() == True:
             while bot.RODAR:
 
                 if bot.MSG_SEG == True:
@@ -74,13 +75,16 @@ class JanelaInicial(QtGui.QMainWindow):
 
         if bot.INIT == True:
             self.iniciar_bot()
+            self.iniciarBot.setEnabled(False)
         else:
             self.parar_bot()
+            self.pararBot.setEnabled(False)
 
         self.configurar()
    
     def recebe_msg_init_lista(self, mensagem):
         self.webView.page().mainFrame().evaluateJavaScript('novoElemento("%s")' % (mensagem,))
+        self.atuaBot.setEnabled(True)
 
     def recebe_msg_init_status(self, mensagem):
         if mensagem == 'ERRO':
@@ -113,6 +117,7 @@ class JanelaInicial(QtGui.QMainWindow):
         self.atuaBot.setShortcut('Ctrl+A')
         self.atuaBot.setStatusTip('Atualizar Twitter - Ctrl+A')
         self.atuaBot.triggered.connect(self.limpar_lista)
+        self.atuaBot.setEnabled(False)
         
         self.keysBot = QtGui.QAction(QtGui.QIcon(settings.CHAVES), 'Chaves', self)
         self.keysBot.setShortcut('Ctrl+C')
@@ -161,13 +166,18 @@ class JanelaInicial(QtGui.QMainWindow):
     
     def iniciar_bot(self):
         bot.RODAR = True
+        self.iniciarBot.setEnabled(False)
+        self.pararBot.setEnabled(True)
         self.pIniciar.start()
 
     def parar_bot(self):
         self.pParar.start()
+        self.iniciarBot.setEnabled(True)
+        self.pararBot.setEnabled(False)
     
     def limpar_lista(self):
         self.webView.page().mainFrame().evaluateJavaScript('LimparLista()')
+        self.atuaBot.setEnabled(False)
     
     def chamar_sobre(self):
         exSobre = DialogoSobre()
