@@ -2,6 +2,10 @@
 # @contact: charles.garrocho@gmail.com
 # @copyright: (C) 2012-2013 Python Software Open Source
 
+"""
+Modulo responsavel pelas configuracoes globais do software.
+"""
+
 import os
 
 # Nome do Arquivo Atual.
@@ -9,8 +13,14 @@ NOME = '{0}.py'.format(os.path.abspath(__file__).split('.')[0])
 
 # Defina Aqui o Estado Inicial do Bot
 INIT = False
+
+# Defina Aqui Se Caso o Queria que o Bot Analize as Mensoes da Conta.
 MENSOES = True
+
+# Defina Aqui Se Caso o Queria que o Bot Analize as Mensagens dos Amigos da Conta.
 MSG_SEG = True
+
+# Defina Aqui Um Intervalo Entre Cada Analize dos Itens acima.
 INTERVALO = 11
 
 # Consumer Key
