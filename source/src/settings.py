@@ -9,9 +9,9 @@ NOME = '{0}.py'.format(os.path.abspath(__file__).split('.')[0])
 
 # Defina Aqui o Estado Inicial do Bot
 INIT = False
-MENSOES = False
-MSG_SEG = False
-INTERVALO = 5
+MENSOES = True
+MSG_SEG = True
+INTERVALO = 11
 
 # Consumer Key
 CONSUMER_KEY = 'fE5bvsY0CEsoy9WUhCEpLw'
