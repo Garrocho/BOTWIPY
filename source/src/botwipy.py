@@ -1,3 +1,4 @@
+
 # coding: utf-8
 # @author: Charles Tim Batista Garrocho
 # @contact: charles.garrocho@gmail.com
@@ -15,8 +16,12 @@ from redis import Redis
 class BotAPI():
 
     def __init__(self):
-        self.RODAR = settings.RODAR
+        self.RODAR = True
+
+        self.INIT = settings.INIT
         self.MENSOES = settings.MENSOES
+        self.MSG_SEG = settings.MSG_SEG
+        self.INTERVALO = settings.INTERVALO
 
         self.redis = Redis()
         self.redis.set('CONSUMER_KEY', settings.CONSUMER_KEY)
