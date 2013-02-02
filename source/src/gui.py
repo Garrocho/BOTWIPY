@@ -340,6 +340,7 @@ class DialogoPreferencias(QtGui.QDialog):
     def iniciar(self):
         self.boxTotal = QtGui.QVBoxLayout()
         self.boxCheckBox = QtGui.QVBoxLayout()
+        self.boxIntervalo = QtGui.QHBoxLayout()
         self.boxBotao = QtGui.QHBoxLayout()
 
         self.checkBoxRoda = QtGui.QCheckBox('Iniciar BoTWiPy ao executar', self)
@@ -366,17 +367,31 @@ class DialogoPreferencias(QtGui.QDialog):
         self.boxTotal.addWidget(self.checkBoxMensoes)
         self.boxTotal.addWidget(self.checkBoxMsgSeg)
 
+        self.sld = QtGui.QSlider(QtCore.Qt.Horizontal, self)
+        self.sld.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.sld.setGeometry(30, 40, 100, 30)
+        self.sld.valueChanged[int].connect(self.changeValue)
+
+        self.label = QtGui.QLabel('<b>0</b>')
+        self.boxIntervalo.addWidget(QtGui.QLabel('<b>Intervalo</b>'))
+        self.boxIntervalo.addWidget(self.sld)
+        self.boxIntervalo.addWidget(self.label)
+
         self.boxBotao.addWidget(self.botaoGravar)
         self.boxBotao.addWidget(self.botaoCancelar)
 
+        self.boxTotal.addLayout(self.boxIntervalo)
         self.boxTotal.addLayout(self.boxBotao)
         self.setLayout(self.boxTotal)
+
+    def changeValue(self, value):
+        self.label.setText('<b>{0}</b>'.format(int(value) + 1))
 
     def configurar(self):
         self.setModal(True)
         self.setWindowTitle('BoTWiPy - Preferencias')
         self.setWindowIcon(QtGui.QIcon(settings.LOGO))
-        self.setFixedSize(310, 200)
+        self.setFixedSize(310, 230)
         self.screen = QtGui.QDesktopWidget().screenGeometry()
         self.size = self.geometry()
         self.move((self.screen.width() - self.size.width()) / 2, (self.screen.height() - self.size.height()) / 2)
