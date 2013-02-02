@@ -8,8 +8,10 @@ import os
 NOME = '{0}.py'.format(os.path.abspath(__file__).split('.')[0])
 
 # Defina Aqui o Estado Inicial do Bot
-RODAR = False
+INIT = False
 MENSOES = False
+MSG_SEG = False
+INTERVALO = 5
 
 # Consumer Key
 CONSUMER_KEY = 'fE5bvsY0CEsoy9WUhCEpLw'
@@ -34,7 +36,7 @@ FOLLOWERS = '{0}/{1}/{2}'.format(PATH, ICON, 'FOLLOWERS.png')
 SAIR = '{0}/{1}/{2}'.format(PATH, ICON, 'SAIR.png')
 ATUALIZAR = '{0}/{1}/{2}'.format(PATH, ICON, 'ATUALIZAR.png')
 LOGO = '{0}/{1}/{2}'.format(PATH, ICON, 'LOGO.png')
-FOLLOW = '{0}/{1}/{2}'.format(PATH, ICON, 'FOLLOW.png')
+BACK = '{0}/{1}/{2}'.format(PATH, ICON, 'BACK.png')
 
 GRAVAR = '{0}/{1}/{2}'.format(PATH, ICON, 'GRAVAR.png')
 CANCELAR = '{0}/{1}/{2}'.format(PATH, ICON, 'CANCELAR.png')
