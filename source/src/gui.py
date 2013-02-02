@@ -22,22 +22,26 @@ class IniciarBot(QtCore.QThread):
 
     def run(self):
         while bot.RODAR:
-            self.mensagem_status_bar.emit('Obtendo Lista de Mensagens dos Meus Seguidores')
-            amigos_tweets = bot.get_amigos_tweets()
-            for tweet in amigos_tweets:
-                self.mensagem_status_bar.emit(tweet.text)
-                usuario = bot.verifica_tweet(tweet, 'RT @(.*?):')
-                if usuario is not None:
-                    seguir = bot.seguir_usuario(usuario[0])
-                    print seguir
-                    self.mensagem_lista.emit('<b>{0}</b><i> <font>{1}</font> </i> <br>{2}'.format(bot.get_meu_nome(), usuario[1], seguir))
-            #self.mensagem_status_bar.emit('Obtendo Lista de Minhas Mensoes')
-            #for usuario in bot.get_mensoes():
-            #    self.mensagem_lista.emit('<b>{0}</b> <br> {1}'.format(bot.get_meu_nome(), bot.seguir_usuario(usuario[1])))
-            #    novo_status = u'Ola @{0}. Obrigado pela sua mensagem! :-)'.format(usuario[1])
-            #    self.mensagem_lista.emit('<b>{0}</b> <br> Atualizou seu Status para: {1}'.format(bot.get_meu_nome(), novo_status))
-            #    bot.atualizar_status(novo_status)
-            time.sleep(2)
+
+            if bot.MSG_SEG == True:
+                self.mensagem_status_bar.emit('Obtendo Lista de Mensagens dos Meus Seguidores')
+                amigos_tweets = bot.get_amigos_tweets()
+                for tweet in amigos_tweets:
+                    self.mensagem_status_bar.emit(tweet.text)
+                    usuario = bot.verifica_tweet(tweet, 'RT @(.*?):')
+                    if usuario is not None:
+                        seguir = bot.seguir_usuario(usuario[0])
+                        print seguir
+                        self.mensagem_lista.emit('<b>{0}</b><i> <font>{1}</font> </i> <br>{2}'.format(bot.get_meu_nome(), usuario[1], seguir))
+            
+            if bot.MENSOES == True:
+                self.mensagem_status_bar.emit('Obtendo Lista de Minhas Mensoes')
+                for usuario in bot.get_mensoes():
+                    self.mensagem_lista.emit('<b>{0}</b> <br> {1}'.format(bot.get_meu_nome(), bot.seguir_usuario(usuario[1])))
+                    novo_status = u'Ola @{0}. Obrigado pela sua mensagem! :-)'.format(usuario[1])
+                    self.mensagem_lista.emit('<b>{0}</b> <br> Atualizou seu Status para: {1}'.format(bot.get_meu_nome(), novo_status))
+                    bot.atualizar_status(novo_status)
+            time.sleep(4)
 
 
 class PararBot(QtCore.QThread):
@@ -45,6 +49,7 @@ class PararBot(QtCore.QThread):
     
     def run(self):
         bot.RODAR = False
+        self.mensagem_status_bar.emit('Parando o BoTWiPy')
 
 
 class JanelaInicial(QtGui.QMainWindow):
@@ -83,14 +88,14 @@ class JanelaInicial(QtGui.QMainWindow):
         self.iniciarBot.triggered.connect(self.iniciar_bot)
         
         self.pararBot = QtGui.QAction(QtGui.QIcon(settings.PARAR), 'Parar', self)
-        self.pararBot.setShortcut('Ctrl+P')
-        self.pararBot.setStatusTip('Parar o Bot - Ctrl+P')
+        self.pararBot.setShortcut('Ctrl+S')
+        self.pararBot.setStatusTip('Parar o Bot - Ctrl+S')
         self.pararBot.triggered.connect(self.parar_bot)
         
-        self.confBot = QtGui.QAction(QtGui.QIcon(settings.CONFIGURAR), 'Configurar', self)
-        self.confBot.setShortcut('Ctrl+C')
-        self.confBot.setStatusTip('Configurar o Bot - Ctrl+C')
-        #self.confBot.triggered.connect(self.close)
+        self.confBot = QtGui.QAction(QtGui.QIcon(settings.CONFIGURAR), 'Preferencias', self)
+        self.confBot.setShortcut('Ctrl+P')
+        self.confBot.setStatusTip('Preferencias do Bot - Ctrl+P')
+        self.confBot.triggered.connect(self.chamar_preferencias)
         
         self.atuaBot = QtGui.QAction(QtGui.QIcon(settings.LIMPAR), 'Limpar', self)
         self.atuaBot.setShortcut('Ctrl+A')
@@ -98,13 +103,13 @@ class JanelaInicial(QtGui.QMainWindow):
         self.atuaBot.triggered.connect(self.limpar_lista)
         
         self.keysBot = QtGui.QAction(QtGui.QIcon(settings.CHAVES), 'Chaves', self)
-        self.keysBot.setShortcut('Ctrl+K')
-        self.keysBot.setStatusTip('Chaves do Bot - Ctrl+K')
+        self.keysBot.setShortcut('Ctrl+C')
+        self.keysBot.setStatusTip('Chaves do Bot - Ctrl+C')
         self.keysBot.triggered.connect(self.chamar_chaves)
         
         self.sobre = QtGui.QAction(QtGui.QIcon(settings.AJUDA), 'Sobre', self)
         self.sobre.setShortcut('Ctrl+H')
-        self.sobre.setStatusTip('Sobre o BotWiPy - Ctrl+S')
+        self.sobre.setStatusTip('Sobre o BotWiPy - Ctrl+H')
         self.sobre.triggered.connect(self.chamar_sobre)
         
         self.sair = QtGui.QAction(QtGui.QIcon(settings.SAIR), 'Sair', self)
@@ -164,9 +169,10 @@ class JanelaInicial(QtGui.QMainWindow):
         exChaves = DialogoChaves()
         exChaves.exec_()
 
-    def chamar_followers(self):
-        exFollowers = DialogoFollowers()
-        exFollowers.exec_()
+    def chamar_preferencias(self):
+        exPreferencias = DialogoPreferencias()
+        exPreferencias.exec_()
+
 
 class DialogoSobre(QtGui.QDialog):
     """
@@ -194,7 +200,7 @@ class DialogoSobre(QtGui.QDialog):
 
     def configurar(self):
         self.setModal(True)
-        self.setWindowTitle('BoTiWiPy - Sobre o Software')
+        self.setWindowTitle('BoTWiPy - Sobre o Software')
         self.setWindowIcon(QtGui.QIcon(settings.LOGO))
         self.setFixedSize(410, 215)
         self.screen = QtGui.QDesktopWidget().screenGeometry()
@@ -273,7 +279,7 @@ class DialogoChaves(QtGui.QDialog):
 
     def configurar(self):
         self.setModal(True)
-        self.setWindowTitle('BoTiWiPy - Chaves de Seguranca')
+        self.setWindowTitle('BoTWiPy - Chaves de Seguranca')
         self.setWindowIcon(QtGui.QIcon(settings.LOGO))
         self.setFixedSize(400, 240)
         self.screen = QtGui.QDesktopWidget().screenGeometry()
@@ -307,6 +313,7 @@ class DialogoChaves(QtGui.QDialog):
                 QtGui.QMessageBox.about(self, "Sucesso", "Chaves Configuradas")
                 self.close()
             else:
+
                 QtGui.QMessageBox.about(self, "Atencao", "Dados Informados Incorretos")
         else:
             QtGui.QMessageBox.about(self, "Atencao", "Dados Incompletos")
@@ -316,6 +323,78 @@ class DialogoChaves(QtGui.QDialog):
         self.campoTextoConsumerSecret.setText('')
         self.campoTextoAcessToken.setText('')
         self.campoTextoAcessTokenSecret.setText('')
+
+
+class DialogoPreferencias(QtGui.QDialog):
+    """
+    Essa é a Interface gráfica do dialogo de preferências da api do bot.
+    Nela é definido várias checagens de preferências.
+    """
+    
+    def __init__(self):
+        super(DialogoPreferencias, self).__init__()
+        self.iniciar()
+        self.adicionar()
+        self.configurar()
+        
+    def iniciar(self):
+        self.boxTotal = QtGui.QVBoxLayout()
+        self.boxCheckBox = QtGui.QVBoxLayout()
+        self.boxBotao = QtGui.QHBoxLayout()
+
+        self.checkBoxRoda = QtGui.QCheckBox('Iniciar BoTWiPy ao executar', self)
+        self.checkBoxRoda.toggle()
+
+        self.checkBoxMensoes = QtGui.QCheckBox('Analizar Mensoes ao BoTWiPy', self)
+        self.checkBoxMensoes.toggle()
+
+        self.checkBoxMsgSeg = QtGui.QCheckBox('Analizar Mensagens Followers', self)
+        self.checkBoxMsgSeg.toggle()
+
+        self.botaoGravar = QtGui.QPushButton(QtGui.QIcon(settings.GRAVAR), 'Gravar')
+        self.botaoGravar.setIconSize(QtCore.QSize(30,30));
+        self.botaoGravar.clicked.connect(self.gravar)
+        
+        self.botaoCancelar = QtGui.QPushButton(QtGui.QIcon(settings.CANCELAR), 'Cancelar')
+        self.botaoCancelar.setIconSize(QtCore.QSize(30,30));
+        self.botaoCancelar.clicked.connect(self.close)
+
+    def adicionar(self):
+        self.boxTotal.addWidget(QtGui.QLabel('<b>Defina</b> abaixo as preferencias do <b>BoTWiPy</b>'))
+
+        self.boxTotal.addWidget(self.checkBoxRoda)
+        self.boxTotal.addWidget(self.checkBoxMensoes)
+        self.boxTotal.addWidget(self.checkBoxMsgSeg)
+
+        self.boxBotao.addWidget(self.botaoGravar)
+        self.boxBotao.addWidget(self.botaoCancelar)
+
+        self.boxTotal.addLayout(self.boxBotao)
+        self.setLayout(self.boxTotal)
+
+    def configurar(self):
+        self.setModal(True)
+        self.setWindowTitle('BoTWiPy - Preferencias')
+        self.setWindowIcon(QtGui.QIcon(settings.LOGO))
+        self.setFixedSize(310, 200)
+        self.screen = QtGui.QDesktopWidget().screenGeometry()
+        self.size = self.geometry()
+        self.move((self.screen.width() - self.size.width()) / 2, (self.screen.height() - self.size.height()) / 2)
+        self.show()
+
+    def gravar(self):
+        if str(self.checkBoxRoda.checkState()) == '2':
+            bot.INIT = True
+        else:
+            bot.INIT = False
+        if str(self.checkBoxMensoes.checkState()) == '2':
+            bot.MENSOES = True
+        else:
+            bot.MENSOES = False
+        if str(self.checkBoxMsgSeg.checkState()) == '2':
+            bot.MSG_SEG = True
+        else:
+            bot.MSG_SEG = False
 
 
 if __name__ == '__main__':
