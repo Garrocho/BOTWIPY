@@ -1,7 +1,5 @@
 # Introdução
-O _BOTWIPY_ é um open-source desenvolvido em Python.
-
-É um bot desenvolvido em Python que utiliza a biblioteca tweepy para utilização da API OAUTH do twiiter.
+O _BOTWIPY_ é um open-source desenvolvido em Python, que utiliza a biblioteca tweepy para utilização da comunicação entre o bot e o twitter, através da API OAUTH.
 
 # Características
 O _BOTWIPY_ consegue visualizar mensagens onde ele foi mensionado, seguir a pessoa que o mencionou e mandar uma mensagem de agradecimento.
