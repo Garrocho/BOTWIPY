@@ -33,7 +33,7 @@ class IniciarBot(QtCore.QThread):
                         seguir = bot.seguir_usuario(usuario[0])
                         print seguir
                         self.mensagem_lista.emit('<b>{0}</b><i> <font>{1}</font> </i> <br>{2}'.format(bot.get_meu_nome(), usuario[1], seguir))
-            
+
             if bot.MENSOES == True:
                 self.mensagem_status_bar.emit('Obtendo Lista de Minhas Mensoes')
                 for usuario in bot.get_mensoes():
@@ -398,19 +398,33 @@ class DialogoPreferencias(QtGui.QDialog):
         self.show()
 
     def gravar(self):
+        a = open(settings.NOME).read()
+
         if str(self.checkBoxRoda.checkState()) == '2':
             bot.INIT = True
+            a = re.sub('\nINIT(.*?)\n', '\nINIT = True\n', a)
         else:
             bot.INIT = False
+            a = re.sub('\nINIT(.*?)\n', '\nINIT = False\n', a)
         if str(self.checkBoxMensoes.checkState()) == '2':
             bot.MENSOES = True
+            a = re.sub('\nMENSOES(.*?)\n', '\nMENSOES = True\n', a)
         else:
             bot.MENSOES = False
+            a = re.sub('\nMENSOES(.*?)\n', '\nMENSOES = False\n', a)
         if str(self.checkBoxMsgSeg.checkState()) == '2':
             bot.MSG_SEG = True
+            a = re.sub('\nMSG_SEG(.*?)\n', '\nMSG_SEG = True\n', a)
         else:
             bot.MSG_SEG = False
+            a = re.sub('\nMSG_SEG(.*?)\n', '\nMSG_SEG = False\n', a)
+
         bot.INTERVALO = int(self.sld.value()) + 1
+        a = re.sub('\nINTERVALO(.*?)\n', '\nINTERVALO = {0}\n'.format(int(self.sld.value()) + 1), a)
+
+        arq = open(settings.NOME, 'w')
+        arq.write(a)
+        arq.close()
 
 
 if __name__ == '__main__':
