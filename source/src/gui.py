@@ -12,6 +12,7 @@ import sys
 import time
 import settings
 import botwipy
+import sys
 from datetime import date
 from threading import Thread
 from PyQt4 import QtGui, QtCore, QtWebKit, Qt
@@ -19,6 +20,7 @@ from PyQt4 import QtGui, QtCore, QtWebKit, Qt
 # Conectando a API utilizando os dados da aplicação.
 global bot
 bot = botwipy.BotAPI()
+encoding = sys.getfilesystemencoding()
 
 
 class IniciarBot(QtCore.QThread):
@@ -35,7 +37,7 @@ class IniciarBot(QtCore.QThread):
             while bot.RODAR:
 
                 if bot.MSG_SEG == True:
-                    self.mensagem_status_bar.emit('Obtendo Lista de Mensagens dos Meus Seguidores')
+                    self.mensagem_status_bar.emit('Analisando a Lista de Mensagens das Pessoas Que Eu Sigo...')
                     amigos_tweets = bot.get_amigos_tweets()
                     for tweet in amigos_tweets:
                         self.mensagem_status_bar.emit(tweet.text)
@@ -45,16 +47,25 @@ class IniciarBot(QtCore.QThread):
                             self.mensagem_lista.emit('<b>{0}</b> <i>{1}</i> <br>{2}'.format(bot.get_meu_nome(), dt.strftime("%d de %B de %Y"), bot.seguir_usuario(usuario[0])))
 
                 if bot.MENSOES == True:
-                    self.mensagem_status_bar.emit('Obtendo Lista de Minhas Mensoes')
+                    self.mensagem_status_bar.emit('Analisando a Lista de Minhas Mensoes...')
                     for usuario in bot.get_mensoes():
+                        self.mensagem_status_bar.emit(usuario[1] + ': ' + usuario[2])
                         dt = date.today()
                         self.mensagem_lista.emit('<b>{0}</b> <i>{1}</i> <br>{2}'.format(bot.get_meu_nome(), dt.strftime("%d de %B de %Y"), bot.seguir_usuario(usuario[1])))
                         novo_status = u'Ola @{0}. Obrigado pela sua mensagem! :-)'.format(usuario[1])
                         self.mensagem_lista.emit('<b>{0}</b> <i>{1}</i> <br> Atualizou seu Status para: {2}'.format(bot.get_meu_nome(), dt.strftime("%d de %B de %Y"), novo_status))
                         bot.atualizar_status(novo_status)
 
-                bot.atualizar_status('Entrando no Estado de Intervalo... {0} minutos de espera'.format(bot.INTERVALO))
-                time.sleep(bot.INTERVALO * 60)
+                self.mensagem_status_bar.emit('Entrando no Estado de Intervalo... {0} minutos de espera'.format(bot.INTERVALO))
+                intervalo = bot.INTERVALO
+                for i in range(intervalo):
+                    if bot.RODAR:
+                        time.sleep(60)
+                        intervalo -= 1
+                        self.mensagem_status_bar.emit('Estado de Intervalo... {0} minutos de espera'.format(intervalo))
+                    else:
+                        break
+                self.mensagem_status_bar.emit('Saindo do Estado de Intervalo...')
         else:
             self.mensagem_status_bar.emit('ERRO')
 
@@ -108,7 +119,6 @@ class JanelaInicial(QtGui.QMainWindow):
     def iniciar(self):
     
         self.webView = QtWebKit.QWebView()
-        
         self.html = open(settings.HTML).read()
         
         self.iniciarBot = QtGui.QAction(QtGui.QIcon(settings.INICIAR), 'Iniciar', self)
