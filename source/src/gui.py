@@ -12,6 +12,7 @@ import sys
 import time
 import settings
 import botwipy
+from datetime import date
 from threading import Thread
 from PyQt4 import QtGui, QtCore, QtWebKit, Qt
 
@@ -22,14 +23,14 @@ bot = botwipy.BotAPI()
 
 class IniciarBot(QtCore.QThread):
     """
-    Processo responsavel por iniciar e analizar as mensagens do BoTWiPy.
+    Processo responsavel por iniciar e analisar as mensagens do BoTWiPy.
     """
     mensagem_lista = QtCore.pyqtSignal(str)
     mensagem_status_bar = QtCore.pyqtSignal(str)
 
     def run(self):
 
-        self.mensagem_status_bar.emit('Analizando as Chaves do BoTWiPy')
+        self.mensagem_status_bar.emit('Analisando as Chaves do BoTWiPy')
         if bot.carrega_api() == True:
             while bot.RODAR:
 
@@ -40,18 +41,20 @@ class IniciarBot(QtCore.QThread):
                         self.mensagem_status_bar.emit(tweet.text)
                         usuario = bot.verifica_tweet(tweet, 'RT @(.*?):')
                         if usuario is not None:
-                            seguir = bot.seguir_usuario(usuario[0])
-                            print seguir
-                            self.mensagem_lista.emit('<b>{0}</b><i> <font>{1}</font> </i> <br>{2}'.format(bot.get_meu_nome(), usuario[1], seguir))
+                            dt = date.today()
+                            self.mensagem_lista.emit('<b>{0}</b> <i>{1}</i> <br>{2}'.format(bot.get_meu_nome(), dt.strftime("%d de %B de %Y"), bot.seguir_usuario(usuario[0])))
 
                 if bot.MENSOES == True:
                     self.mensagem_status_bar.emit('Obtendo Lista de Minhas Mensoes')
                     for usuario in bot.get_mensoes():
-                        self.mensagem_lista.emit('<b>{0}</b> <br> {1}'.format(bot.get_meu_nome(), bot.seguir_usuario(usuario[1])))
+                        dt = date.today()
+                        self.mensagem_lista.emit('<b>{0}</b> <i>{1}</i> <br>{2}'.format(bot.get_meu_nome(), dt.strftime("%d de %B de %Y"), bot.seguir_usuario(usuario[1])))
                         novo_status = u'Ola @{0}. Obrigado pela sua mensagem! :-)'.format(usuario[1])
-                        self.mensagem_lista.emit('<b>{0}</b> <br> Atualizou seu Status para: {1}'.format(bot.get_meu_nome(), novo_status))
+                        self.mensagem_lista.emit('<b>{0}</b> <i>{1}</i> <br> Atualizou seu Status para: {2}'.format(bot.get_meu_nome(), dt.strftime("%d de %B de %Y"), novo_status))
                         bot.atualizar_status(novo_status)
-                time.sleep(bot.INTERVALO)
+
+                bot.atualizar_status('Entrando no Estado de Intervalo... {0} minutos de espera'.format(bot.INTERVALO))
+                time.sleep(bot.INTERVALO * 60)
         else:
             self.mensagem_status_bar.emit('ERRO')
 
@@ -89,7 +92,7 @@ class JanelaInicial(QtGui.QMainWindow):
         else:
             self.parar_bot()
             self.pararBot.setEnabled(False)
-
+                        
         self.configurar()
    
     def recebe_msg_init_lista(self, mensagem):
@@ -376,11 +379,11 @@ class DialogoPreferencias(QtGui.QDialog):
         if bot.INIT == True:
             self.checkBoxRoda.toggle()
 
-        self.checkBoxMensoes = QtGui.QCheckBox('Analizar Mensoes ao BoTWiPy', self)
+        self.checkBoxMensoes = QtGui.QCheckBox('Analisar Mensoes ao BoTWiPy', self)
         if bot.MENSOES == True:
             self.checkBoxMensoes.toggle()
 
-        self.checkBoxMsgSeg = QtGui.QCheckBox('Analizar Mensagens Followers', self)
+        self.checkBoxMsgSeg = QtGui.QCheckBox('Analisar Mensagens Followers', self)
         if bot.MSG_SEG == True:
             self.checkBoxMsgSeg.toggle()
 

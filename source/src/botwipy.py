@@ -119,7 +119,7 @@ class BotAPI():
         minhas_mensoes = tweepy.Cursor(self.api.mentions).items()
         lista = []
         for status in minhas_mensoes:
-            lista.append([status.user.id, status.user.screen_name, status.text])
+            lista.append([status.user.id, status.user.screen_name, status.text, status.created_at])
         return lista
 
     def send_mensagem(self, usuario, mensagem):
