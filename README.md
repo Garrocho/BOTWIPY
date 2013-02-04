@@ -4,6 +4,8 @@ O _BOTWIPY_ é um open-source desenvolvido em Python, que utiliza a biblioteca t
 ## Características #
 O _BOTWIPY_ consegue visualizar mensagens onde ele foi mensionado, seguir a pessoa que o mencionou e mandar uma mensagem de agradecimento.
 O _BOTWIPY_ também analisa mensagens postados por pessoas que ele segue, e verifica se existe algum usuário citado na mensagem, se sim, ele segue aquele usuário.
+Para a persistência dos dados foi utilizado o banco de dados Redis, para o armazenamento temporário das chaves oauth, devido a sua fácil utilização.
+Para a interface gráfica foi utilizado o PyQt4, devido a sua portabilidade e facilidade de manipulação de threads.
 
 ## Wiki do Projeto #
 Contém a instalação e configuração do projeto.
