@@ -75,9 +75,9 @@ class IniciarBot(QtCore.QThread):
                             for i in range(60):
                                 if bot.RODAR:
                                     time.sleep(1)
-                                    intervalo -= 1
                                 else:
                                     raise
+                            intervalo -= 1
                             self.mensagem_status_bar.emit('Estado de Intervalo... {0} minutos de espera'.format(intervalo))
                         else:
                             raise
