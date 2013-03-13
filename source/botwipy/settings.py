@@ -1,3 +1,4 @@
+# coding: utf-8
 # @author: Charles Tim Batista Garrocho
 # @contact: charles.garrocho@gmail.com
 # @copyright: (C) 2012-2013 Python Software Open Source
@@ -32,9 +33,9 @@ OAUTH_TOKEN = '1024579182-pBEpPE8SyZjplZJHbPE64G3dcskSlUZYWutOpo2'
 OAUTH_TOKEN_SECRET = 'aE6RBQl8HtZ9auMPEvTtN7R9dZ2oqp1WI5vXONs'
 
 # Endereco principal do source do projeto.
-PATH = os.getcwd().split('/src')[0]
-ICON = 'icon/'
-ARQ = 'arq/'
+PATH = os.getcwd().split('/botwipy')[0]
+ICON = 'media/icon/'
+ARQ = 'media/arq/'
 
 # Endereco de cada icone do projeto.
 INICIAR = '{0}/{1}/{2}'.format(PATH, ICON, 'INICIAR.png')

@@ -1,4 +1,3 @@
-
 # coding: utf-8
 # @author: Charles Tim Batista Garrocho
 # @contact: charles.garrocho@gmail.com
